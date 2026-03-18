@@ -125,18 +125,45 @@ const ResultsPage = () => {
     const [showReportModal, setShowReportModal] = useState(false); // New state
     const { setSummaryStats } = useContext(SummaryStatsContext);
 
-    const handleDownloadPDF = () => {
-        if (!componentRef.current) return;
-        const element = componentRef.current;
+   const handleDownloadPDF = () => {
+        if (!analytics?.research) {
+            alert("Report data is not available yet.");
+            return;
+        }
+
+        // 1. Get the raw text and escape basic HTML to prevent rendering issues
+        let formattedText = analytics.research.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        
+        // 2. Parse Markdown bold (**text**) into HTML <strong> tags
+        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+        // 3. Create a temporary, invisible container for the PDF layout
+        const printContainer = document.createElement("div");
+        
+        // 4. Build the HTML structure specifically for the PDF
+        printContainer.innerHTML = `
+            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 20px; color: #2c3e50;">
+                <h1 style="color: #0077be; text-align: center; border-bottom: 2px solid #0077be; padding-bottom: 10px; margin-bottom: 20px;">
+                    MarineInsight Scientific Assessment
+                </h1>
+                <h3 style="color: #34495e;">Batch ID: ${id}</h3>
+                <div style="white-space: pre-wrap; line-height: 1.8; font-size: 14px; text-align: justify;">
+                    ${formattedText}
+                </div>
+            </div>
+        `;
+
         const opt = {
-            margin: 0.5,
-            filename: `MarineInsight_Batch_${id}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, logging: false },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            margin:       0.5,
+            filename:     `MarineInsight_Report_Batch_${id}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: false },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
         };
-        html2pdf().set(opt).from(element).save();
+
+        // 5. Generate the PDF from the temporary container
+        html2pdf().set(opt).from(printContainer).save();
     };
 
     const handleDownloadCSV = () => {
