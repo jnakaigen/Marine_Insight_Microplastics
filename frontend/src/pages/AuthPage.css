@@ -1,0 +1,122 @@
+.auth-page {
+    /* The gradient background */
+    background: linear-gradient(-45deg, #007bff, #28a745, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient-animation 15s ease infinite;
+    
+    /* Keep the centering styles */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative; /* Important for the particles */
+    overflow: hidden;   /* Hide anything that goes outside the screen */
+}
+
+/* Keyframes animation to move the gradient */
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.auth-container .logo {
+    font-weight: 700;
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.auth-container h1 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.auth-container .btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none;
+    font-size: 1em;
+    color: #fff;
+}
+
+.auth-container .btn.btn-primary {
+    background-color: #007bff;
+}
+.auth-container .btn.btn-primary:hover {
+    background-color: #0056b3;
+}
+.auth-container .btn.btn-primary.signup {
+    background-color: #28a745;
+}
+.auth-container .btn.btn-primary.signup:hover {
+    background-color: #218838;
+}
+
+.form-links {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.form-links a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+}

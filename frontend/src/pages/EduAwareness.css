@@ -1,0 +1,380 @@
+/* .marine-theme-wrapper {
+    background: linear-gradient(180deg, #000814 0%, #001d3d 100%);
+    color: #e0e1dd;
+    padding: 80px 10%;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+.marine-main-title {
+    color: #ffd60a; 
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+}
+
+.marine-glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    margin-bottom: 60px;
+    line-height: 1.8;
+}
+
+.marine-section-title {
+    color: #00b4d8;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    border-left: 6px solid #ffd60a;
+    padding-left: 20px;
+}
+
+.marine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 80px;
+}
+
+.marine-card {
+    background: rgba(0, 53, 102, 0.4);
+    padding: 30px;
+    border-radius: 15px;
+    border-bottom: 4px solid #00b4d8;
+    transition: all 0.3s ease;
+}
+
+.marine-card:hover {
+    transform: translateY(-8px);
+    background: rgba(0, 53, 102, 0.6);
+    border-color: #ffd60a;
+}
+
+.marine-card h3 {
+    color: #90e0ef;
+    margin-top: 0;
+}
+
+.ai-highlight {
+    font-size: 1.2rem;
+    color: #caf0f8;
+    margin-bottom: 40px;
+    text-align: center;
+    font-style: italic;
+}
+
+.ai-points-grid p {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+}
+
+.ai-points-grid strong {
+    color: #ffd60a;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+} */
+
+/* @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&display=swap');
+
+.marine-viewport {
+    background: #000814;
+    color: #e0e1dd;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    padding: 80px 10%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+
+.ocean-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 50%, #001d3d 0%, #000814 100%);
+    z-index: -1;
+}
+
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.main-glow-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(to bottom, #fff, #00f5d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 50px;
+}
+
+.glass-hero {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 50px;
+    line-height: 1.8;
+    font-size: 1.15rem;
+    margin-bottom: 80px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.sub-glow-title {
+    color: #00f5d4;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.sub-glow-title.gold { color: #ffd60a; }
+
+
+.common-types-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 100px;
+}
+
+.type-glass-card {
+    background: rgba(0, 53, 102, 0.3);
+    border: 1px solid rgba(0, 245, 212, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.4s ease;
+    animation: float 6s ease-in-out infinite;
+}
+
+.type-glass-card:hover {
+    background: rgba(0, 245, 212, 0.1);
+    border-color: #00f5d4;
+    transform: scale(1.05);
+}
+
+.card-id {
+    color: #00f5d4;
+    font-weight: 700;
+    opacity: 0.3;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.type-glass-card h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+
+.ai-lead-text {
+    font-size: 1.3rem;
+    color: #90e0ef;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.ai-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.ai-log {
+    border-left: 4px solid #ffd60a;
+    padding-left: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px;
+    border-radius: 0 15px 15px 0;
+}
+
+.ai-log strong {
+    color: #ffd60a;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+} */
+ @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&display=swap');
+
+.marine-viewport {
+    background: #000814;
+    color: #e0e1dd;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    padding: 80px 10%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* --- NEW: BUBBLE EFFECTS --- */
+.marine-viewport::before,
+.marine-viewport::after,
+.ocean-overlay::before {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 245, 212, 0.15) 0%, rgba(0, 245, 212, 0) 70%);
+    filter: blur(5px);
+    z-index: -1;
+    animation: bubble-rise 15s infinite ease-in-out;
+}
+
+/* Individual Bubble Positions & Sizes */
+.marine-viewport::before {
+    width: 150px; height: 150px;
+    left: 5%; bottom: -100px;
+    animation-duration: 18s;
+}
+
+.marine-viewport::after {
+    width: 250px; height: 250px;
+    right: 10%; bottom: -200px;
+    animation-delay: 2s;
+    animation-duration: 22s;
+}
+
+.ocean-overlay::before {
+    width: 100px; height: 100px;
+    left: 40%; bottom: -150px;
+    animation-delay: 5s;
+    animation-duration: 12s;
+    background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, rgba(255, 214, 10, 0) 70%);
+}
+
+@keyframes bubble-rise {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    20% { opacity: 0.5; }
+    80% { opacity: 0.5; }
+    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+/* --- END BUBBLE EFFECTS --- */
+
+/* Moving Ocean Background */
+.ocean-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 50%, #001d3d 0%, #000814 100%);
+    z-index: -1;
+}
+
+/* Animation: Floating movement for cards */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.main-glow-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(to bottom, #fff, #00f5d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 50px;
+}
+
+.glass-hero {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 50px;
+    line-height: 1.8;
+    font-size: 1.15rem;
+    margin-bottom: 80px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    /* Subtle inner bubble glow */
+    position: relative;
+    overflow: hidden;
+}
+
+.sub-glow-title {
+    color: #00f5d4;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.sub-glow-title.gold { color: #ffd60a; }
+
+/* Grid Cards */
+.common-types-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 100px;
+}
+
+.type-glass-card {
+    background: rgba(0, 53, 102, 0.3);
+    border: 1px solid rgba(0, 245, 212, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.4s ease;
+    animation: float 6s ease-in-out infinite;
+    backdrop-filter: blur(5px);
+}
+
+.type-glass-card:hover {
+    background: rgba(0, 245, 212, 0.1);
+    border-color: #00f5d4;
+    transform: scale(1.05);
+    /* Hover bubble pop effect */
+    box-shadow: 0 0 30px rgba(0, 245, 212, 0.2);
+}
+
+.card-id {
+    color: #00f5d4;
+    font-weight: 700;
+    opacity: 0.3;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.type-glass-card h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+/* AI Section */
+.ai-lead-text {
+    font-size: 1.3rem;
+    color: #90e0ef;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.ai-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.ai-log {
+    border-left: 4px solid #ffd60a;
+    padding-left: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px;
+    border-radius: 0 15px 15px 0;
+}
+
+.ai-log strong {
+    color: #ffd60a;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}

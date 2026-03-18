@@ -1,0 +1,72 @@
+/* In src/index.css or App.css
+body {
+  background-color: #f7fafc;
+  color: #2d3748; 
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  
+  --bg-color: #f4f7f6;
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --text-color: #2c3e50;
+  --accent-color: #27ae60; 
+  --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='dark'] {
+
+  --bg-color: #0b0f10;
+  --header-bg: rgba(15, 20, 22, 0.7);
+  --text-color: #e0e0e0;
+  --accent-color: #00ff88; 
+  --glass-border: rgba(0, 255, 136, 0.1);
+}
+
+.app-header {
+  background: var(--header-bg);
+  backdrop-filter: blur(10px); 
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-left: 15px;
+  font-size: 0.8rem;
+}
+
+:root {
+  
+  --bg-color: #f4f7f6;
+  --text-primary: #2c3e50;
+  --card-bg: #ffffff;
+  --accent: #27ae60;
+}
+
+[data-theme='dark'] {
+  
+  --bg-color: #0b0f10;
+  --text-primary: #e0e0e0;
+  --card-bg: #161b1d;
+  --accent: #00ff88;
+}
+
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+} */

@@ -1,0 +1,100 @@
+.app-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+.app-header .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.app-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-header .logo {
+    font-weight: 700;
+    font-size: 1.5em;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.app-header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.app-header nav ul li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.app-header nav ul li a:hover {
+    color: #007bff;
+}
+
+.app-header .btn {
+    padding: 10px 22px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.app-header .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+}
+
+.app-header .btn-primary:hover {
+    background-color: #0056b3;
+}
+/* Define themes at the root level */
+:root {
+  /* Light Mode - High Contrast for Field Work */
+  --bg-color: #f4f7f6;
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --text-color: #2c3e50;
+  --accent-color: #27ae60; /* Marine Green */
+  --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='dark'] {
+  /* Dark Mode - Aesthetic Glassmorphism */
+  --bg-color: #0b0f10;
+  --header-bg: rgba(15, 20, 22, 0.7);
+  --text-color: #e0e0e0;
+  --accent-color: #00ff88; /* Neon Marine Green */
+  --glass-border: rgba(0, 255, 136, 0.1);
+}
+
+.app-header {
+  background: var(--header-bg);
+  backdrop-filter: blur(10px); /* Glassmorphism effect */
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn {
+  background: none;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-left: 15px;
+  font-size: 0.8rem;
+}

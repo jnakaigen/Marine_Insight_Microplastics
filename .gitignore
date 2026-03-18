@@ -1,0 +1,68 @@
+# # --- Secrets (NEVER UPLOAD THESE) ---
+# .env
+# backend/.env
+# frontend/.env
+
+# # --- Python ---
+# __pycache__/
+# *.py[cod]
+# venv/
+# .pytest_cache/
+
+# # --- Node.js (React) ---
+# node_modules/
+# dist/
+# build/
+# .DS_Store
+# thumbs.db
+# ==========================================
+# 🛑 SECRETS (NEVER UPLOAD)
+# ==========================================
+.env
+backend/.env
+frontend/.env
+djangoproject/.env
+# ==========================================
+# 🤖 AI MODELS (From your screenshot)
+# ==========================================
+# These are too large for standard GitHub
+age_classifier_v2.h5
+best_weathering.pt
+best.pt
+risk_model.pkl
+
+# ==========================================
+# 🐍 BACKEND & PYTHON
+# ==========================================
+venv_stable/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Databases
+db.sqlite3
+your_persist_directory/
+
+# Training Data
+risk_training_data.csv
+
+# ==========================================
+# ⚛️ FRONTEND & NODE
+# ==========================================
+node_modules/
+frontend/node_modules/
+build/
+dist/
+.DS_Store
+thumbs.db
+
+# ==========================================
+# 📂 MEDIA & UPLOADS
+# ==========================================
+media/
+uploads/
+*.jpg
+*.jpeg
+*.png
+!frontend/src/assets/**

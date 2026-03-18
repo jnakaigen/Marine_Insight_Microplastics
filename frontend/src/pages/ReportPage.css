@@ -1,0 +1,168 @@
+.report-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.report-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.report-header p {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #666;
+    font-size: 1.1em;
+}
+
+.section-card {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Overview Stats */
+.stats-overview {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    padding: 10px;
+}
+
+.stat-item .value {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.stat-item .label {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Data Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensure consistent column widths */
+}
+
+.data-table th, .data-table td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    word-wrap: break-word; /* Handle long text */
+}
+
+.data-table thead th {
+    background-color: #f2f2f2;
+    font-weight: 500;
+}
+
+.data-table tbody td {
+    vertical-align: top; /* Align text at top for better readability */
+}
+/* Charts */
+.charts-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.chart {
+    flex: 1;
+    min-width: 400px;
+}
+
+.chart-title {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.bar-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 250px;
+    border-bottom: 2px solid #ccc;
+    padding: 0 10px;
+}
+
+.bar {
+    flex: 1;
+    background-color: #007bff;
+    position: relative;
+    margin: 0 2%;
+}
+
+.bar-green {
+    background-color: #28a745;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* AI Insights */
+.insights-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.insights-list li {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    padding-left: 20px;
+    position: relative;
+}
+
+.insights-list li::before {
+    content: '➤';
+    position: absolute;
+    left: 0;
+    color: #007bff;
+}
+
+/* Action Buttons */
+.report-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.report-actions .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}

@@ -1,0 +1,123 @@
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+    font-size: 2em;
+    margin: 0;
+    color: #2d3748; /* Dark charcoal heading */
+}
+
+/* --- New Gradient Button Style --- */
+.dashboard-header .btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    color: #fff;
+    background-image: linear-gradient(to right, #4a90e2 0%, #9f7aea 100%);
+    box-shadow: 0 4px 15px 0 rgba(159, 122, 234, 0.4);
+}
+
+.dashboard-header .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px 0 rgba(159, 122, 234, 0.6);
+}
+
+/* --- New Section Title Style --- */
+.section-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0; /* Light gray border */
+    color: #2d3748;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* --- New Card Styling --- */
+.analysis-card {
+    background-color: #ffffff; /* Clean white cards */
+    border: 1px solid #e2e8f0; /* Light border */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analysis-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.analysis-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #2d3748;
+}
+
+.card-content p {
+    color: #718096; /* Softer gray for secondary text */
+    margin-bottom: 20px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.card-actions a {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
+}
+
+.card-actions a:hover {
+    transform: translateY(-2px);
+}
+
+/* --- New Button Styles --- */
+.btn-view {
+    background-color: #edf2f7;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-view:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-report {
+    color: #fff;
+    border: none;
+    background-image: linear-gradient(to right, #4a90e2 0%, #9f7aea 100%);
+}
+
+.btn-report:hover {
+    box-shadow: 0 4px 15px 0 rgba(159, 122, 234, 0.4);
+}

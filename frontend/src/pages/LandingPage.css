@@ -1,0 +1,132 @@
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+.hero {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 180px 20px 140px 20px;
+}
+
+.hero h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+}
+
+.hero p {
+    font-size: 1.3em;
+    font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+}
+
+/* Sections */
+.section {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.section-light {
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.section-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    text-align: left;
+}
+
+.feature-item {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.feature-item h3 {
+    font-size: 1.5em;
+    margin-top: 0;
+    color: #007bff;
+}
+
+/* How it works */
+.steps-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+    margin-top: 60px;
+    flex-wrap: wrap;
+}
+
+.step {
+    max-width: 300px;
+}
+
+.step-number {
+    font-size: 3em;
+    font-weight: 700;
+    color: #007bff;
+    line-height: 1;
+}
+
+.step h3 {
+    font-size: 1.4em;
+    margin: 10px 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.cta-section .section-title {
+    color: #fff;
+}
+
+.cta-section p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    opacity: 0.9;
+}
+
+.btn {
+    padding: 10px 22px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-light {
+    background-color: #fff;
+    color: #007bff;
+    font-size: 1.1em;
+    padding: 15px 35px;
+}
+
+.btn-light:hover {
+    background-color: #f0f0f0;
+}
