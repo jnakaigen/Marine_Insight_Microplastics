@@ -1,229 +1,3 @@
-// import { gsap } from 'gsap';
-// import { useGSAP } from '@gsap/react';
-// import React, { useState, useEffect, useRef } from 'react';
-// import { Link } from 'react-router-dom';
-// import Layout from '../components/Layout';
-// import './DashboardPage.css';
-
-// const DashboardPage = () => {
-//     const container = useRef();
-//     const [analyses, setAnalyses] = useState([]);
-//     const [isLoading, setIsLoading] = useState(true);
-
-//     useEffect(() => {
-//         fetch('http://127.0.0.1:8000/api/dashboard/')
-//             .then(res => res.json())
-//             .then(data => {
-//                 setAnalyses(data);
-//                 setIsLoading(false);
-//             })
-//             .catch(err => {
-//                 console.error("Error fetching dashboard data:", err);
-//                 setIsLoading(false);
-//             });
-//     }, []);
-
-//     // GSAP animations
-//     useGSAP(() => {
-//         gsap.from('.dashboard-header, .section-title', {
-//             duration: 0.7,
-//             opacity: 0,
-//             y: -30,
-//             ease: 'power3.out',
-//             stagger: 0.2,
-//         });
-
-//         gsap.from('.analysis-card', {
-//             duration: 0.6,
-//             opacity: 0,
-//             y: 50,
-//             ease: 'power3.out',
-//             stagger: 0.1,
-//             delay: 0.4,
-//         });
-//     }, { scope: container });
-
-//     if (isLoading) {
-//         return <Layout><div style={{ padding: '20px' }}>Loading dashboard...</div></Layout>;
-//     }
-
-//     return (
-//         <Layout>
-//             <div ref={container}>
-//                 <div className="dashboard-header">
-//                     <h1>Dashboard</h1>
-//                     <Link to="/upload" className="btn">Start New Analysis</Link>
-//                 </div>
-
-//                 <h2 className="section-title">Recent Analyses</h2>
-
-//                 <div className="analysis-grid" style={{ marginBottom: '60px' }}>
-//                     {analyses.length === 0 && <p>No analyses found.</p>}
-
-//                     {analyses.map(batch =>
-//                         batch.detections.map(analysis => (
-//                             <div className="analysis-card" key={analysis.id}>
-//                                 <img
-//                                     src={analysis.annotated_image || analysis.annotated_image_base64}
-//                                     alt={analysis.filename}
-//                                 />
-//                                 <div className="card-content">
-//                                     <h3>{analysis.sampling_location}</h3>
-//                                     {/* <p><strong>Location:</strong> {analysis.sampling_location || 'N/A'}</p> */}
-//                                     <p>
-//                                         <strong>Date & Time:</strong>{" "}
-//                                         {analysis.analysis_timestamp
-//                                             ? new Date(analysis.analysis_timestamp).toLocaleString()
-//                                             : "N/A"}
-//                                     </p>
-
-//                                     <div className="card-actions">
-//                                         <Link
-//                                             to={`/results/${batch.batch_id}`}
-//                                             className="btn-view"
-//                                         >
-//                                             View Results
-//                                         </Link>
-
-//                                         <Link to="/report" className="btn-report">View Report</Link>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         ))
-//                     )}
-//                 </div>
-//             </div>
-//         </Layout>
-//     );
-// };
-
-// export default DashboardPage;
-
-
-
-
-// import { gsap } from 'gsap';
-// import { useGSAP } from '@gsap/react';
-// import React, { useState, useEffect, useRef } from 'react';
-// import { Link } from 'react-router-dom';
-// import Layout from '../components/Layout';
-// import './DashboardPage.css';
-
-// const DashboardPage = () => {
-//     const container = useRef();
-//     const [analyses, setAnalyses] = useState([]);
-//     const [isLoading, setIsLoading] = useState(true);
-
-//     useEffect(() => {
-//         fetch('http://127.0.0.1:8000/api/dashboard/')
-//             .then(res => res.json())
-//             .then(data => {
-//                 setAnalyses(data);
-//                 setIsLoading(false);
-//             })
-//             .catch(err => {
-//                 console.error("Error fetching dashboard data:", err);
-//                 setIsLoading(false);
-//             });
-//     }, []);
-
-//     // GSAP animations - kept exactly as you had them
-//     useGSAP(() => {
-//         gsap.from('.dashboard-header, .section-title', {
-//             duration: 0.7,
-//             opacity: 0,
-//             y: -30,
-//             ease: 'power3.out',
-//             stagger: 0.2,
-//         });
-
-//         gsap.from('.analysis-card', {
-//             duration: 0.6,
-//             opacity: 0,
-//             y: 50,
-//             ease: 'power3.out',
-//             stagger: 0.1,
-//             delay: 0.4,
-//         });
-//     }, { scope: container });
-
-//     if (isLoading) {
-//         return <Layout><div style={{ padding: '20px' }}>Loading dashboard...</div></Layout>;
-//     }
-
-//     return (
-//         <Layout>
-//             <div ref={container}>
-//                 <div className="dashboard-header">
-//                     <h1>Dashboard</h1>
-//                     <Link to="/qa" className="btn">Start New Analysis</Link>
-//                 </div>
-
-//                 <h2 className="section-title">Recent Analyses</h2>
-
-//                 <div className="analysis-grid" style={{ marginBottom: '60px' }}>
-//                     {analyses.length === 0 && <p>No analyses found.</p>}
-
-//                     {/* EDIT: Map through batches, not individual detections */}
-//                     {analyses.map(batch => {
-//                         // Use the first detection in the batch for the display info
-//                         const mainDisplay = batch.detections[0] || {};
-                        
-//                         return (
-//                             <div className="analysis-card" key={batch.batch_id}>
-//                                 <div style={{ position: 'relative' }}>
-//                                     <img
-//                                         src={mainDisplay.annotated_image}
-//                                         alt={mainDisplay.filename}
-//                                     />
-//                                     {/* Small badge to show how many images are in this batch */}
-//                                     {batch.image_count > 1 && (
-//                                         <span className="batch-badge">
-//                                             {batch.image_count} Images
-//                                         </span>
-//                                     )}
-//                                 </div>
-//                                 <div className="card-content">
-//                                     <h3>{mainDisplay.sampling_location || 'Shared Batch'}</h3>
-                                    
-//                                     <p>
-//                                         <strong>Date & Time:</strong>{" "}
-//                                         {batch.last_created
-//                                             ? new Date(batch.last_created).toLocaleString()
-//                                             : "N/A"}
-//                                     </p>
-
-                                    
-//                                     <div className="batch-summary">
-//                                         {Object.entries(batch.summary).map(([type, count]) => (
-//                                             count > 0 && <span key={type} className="type-tag">{type}: {count}</span>
-//                                         ))}
-//                                     </div>
-
-//                                     <div className="card-actions">
-//                                         <Link
-//                                             to={`/results/${batch.batch_id}`}
-//                                             className="btn-view"
-//                                         >
-//                                             View Batch Results
-//                                         </Link>
-
-//                                         <Link to="/report" className="btn-report">View Report</Link>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         );
-//                     })}
-//                 </div>
-//             </div>
-//         </Layout>
-//     );
-// };
-
-// export default DashboardPage;
-
-
-
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import React, { useState, useEffect, useRef } from 'react';
@@ -235,7 +9,6 @@ const DashboardPage = () => {
     const container = useRef();
     const [analyses, setAnalyses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    // 1. Add state for the search query
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
@@ -251,53 +24,77 @@ const DashboardPage = () => {
             });
     }, []);
 
-    // 2. Filter the analyses based on the sampling_location
     const filteredAnalyses = analyses.filter(batch => {
         const location = batch.detections[0]?.sampling_location || 'Shared Batch';
         return location.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
     useGSAP(() => {
-        // We trigger animations whenever the filtered list changes to keep it snappy
         gsap.from('.analysis-card', {
-            duration: 0.6,
+            duration: 0.5,
             opacity: 0,
-            y: 30,
-            ease: 'power3.out',
-            stagger: 0.1,
+            y: 40,
+            scale: 0.95,
+            ease: 'back.out(1.2)',
+            stagger: 0.08,
+            clearProps: "all" // Cleans up inline styles after animation so hover effects work
         });
-    }, { scope: container, dependencies: [searchQuery] }); 
+    }, { scope: container, dependencies: [searchQuery, isLoading] });
 
     if (isLoading) {
-        return <Layout><div style={{ padding: '20px' }}>Loading dashboard...</div></Layout>;
+        return (
+            <Layout>
+                <div className="dashboard-loading">
+                    <div className="spinner"></div>
+                    <p>Fetching AI Analyses...</p>
+                </div>
+            </Layout>
+        );
     }
 
     return (
         <Layout>
-            <div ref={container}>
-                <div className="dashboard-header">
-                    <h1>Dashboard</h1>
-                    <div className="header-actions">
-                        {/* 3. Search Input Field */}
-                        <input 
-                            type="text" 
-                            placeholder="Search by location..." 
-                            className="search-input"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <Link to="/qa" className="btn">Start New Analysis</Link>
+            <div className="dashboard-wrapper" ref={container}>
+                {/* Header Section */}
+                <div className="dashboard-header-modern">
+                    <div className="header-title-group">
+                        <h1>Analysis Dashboard</h1>
+                        <p>Manage and review your microplastic detection batches.</p>
+                    </div>
+                    <div className="header-actions-modern">
+                        <div className="search-wrapper">
+                            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input 
+                                type="text" 
+                                placeholder="Search by location..." 
+                                className="search-input-modern"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                        <Link to="/qa" className="btn-primary-glow">
+                            <span className="plus-icon">+</span> New Analysis
+                        </Link>
                     </div>
                 </div>
 
-                <h2 className="section-title">
-                    {searchQuery ? `Results for "${searchQuery}"` : "Recent Analyses"}
-                </h2>
+                {/* Section Title */}
+                <div className="section-divider">
+                    <h2>{searchQuery ? `Search Results for "${searchQuery}"` : "Recent Batches"}</h2>
+                    <span className="batch-count">{filteredAnalyses.length} Total</span>
+                </div>
 
-                <div className="analysis-grid" style={{ marginBottom: '60px' }}>
-                    {/* 4. Map through filteredAnalyses instead of analyses */}
+                {/* Grid Section */}
+                <div className="analysis-grid-modern">
                     {filteredAnalyses.length === 0 && (
-                        <p className="no-results">No analyses found matching that location.</p>
+                        <div className="empty-state">
+                            <div className="empty-icon">🔍</div>
+                            <h3>No results found</h3>
+                            <p>We couldn't find any batches matching "{searchQuery}".</p>
+                        </div>
                     )}
 
                     {filteredAnalyses.map(batch => {
@@ -305,38 +102,49 @@ const DashboardPage = () => {
                         
                         return (
                             <div className="analysis-card" key={batch.batch_id}>
-                                <div style={{ position: 'relative' }}>
+                                <div className="card-image-wrapper">
                                     <img
-                                        src={mainDisplay.annotated_image}
-                                        alt={mainDisplay.filename}
+                                        src={mainDisplay.annotated_image || '/placeholder-image.jpg'}
+                                        alt={mainDisplay.filename || 'Analysis thumbnail'}
+                                        className="card-image"
                                     />
+                                    <div className="card-image-overlay"></div>
                                     {batch.image_count > 1 && (
-                                        <span className="batch-badge">
+                                        <span className="batch-badge-glass">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                                             {batch.image_count} Images
                                         </span>
                                     )}
                                 </div>
-                                <div className="card-content">
-                                    <h3>{mainDisplay.sampling_location || 'Shared Batch'}</h3>
+                                
+                                <div className="card-body">
+                                    <h3 className="card-location">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                        {mainDisplay.sampling_location || 'Shared Batch'}
+                                    </h3>
                                     
-                                    <p>
-                                        <strong>Date & Time:</strong>{" "}
-                                        {batch.last_created
-                                            ? new Date(batch.last_created).toLocaleString()
-                                            : "N/A"}
+                                    <p className="card-date">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                        {batch.last_created ? new Date(batch.last_created).toLocaleString() : "Date N/A"}
                                     </p>
 
-                                    <div className="batch-summary">
+                                    <div className="tags-container">
                                         {Object.entries(batch.summary).map(([type, count]) => (
-                                            count > 0 && <span key={type} className="type-tag">{type}: {count}</span>
+                                            count > 0 && (
+                                                <span key={type} className={`type-tag tag-${type.toLowerCase()}`}>
+                                                    {type}: <strong>{count}</strong>
+                                                </span>
+                                            )
                                         ))}
                                     </div>
 
-                                    <div className="card-actions">
-                                        <Link to={`/results/${batch.batch_id}`} className="btn-view">
-                                            View Batch Results
+                                    <div className="card-actions-modern">
+                                        <Link to={`/results/${batch.batch_id}`} className="action-btn view-btn">
+                                            View Results
                                         </Link>
-                                        <Link to="/report" className="btn-report">View Report</Link>
+                                        <Link to={`/report/${batch.batch_id}`} className="action-btn report-btn">
+                                            Report
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

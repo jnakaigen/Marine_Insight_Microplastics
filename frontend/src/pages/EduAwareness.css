@@ -378,3 +378,26 @@
     margin-bottom: 5px;
     font-size: 1.1rem;
 }
+.content-image-wrapper {
+    margin: 15px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.content-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.image-caption {
+    background: rgba(0, 0, 0, 0.6);
+    color: #e0e0e0;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    font-style: italic;
+    text-align: center;
+    margin: 0;
+}

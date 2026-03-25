@@ -303,7 +303,7 @@ const QAPage = () => {
                     <h3 style={styles.sectionTitle}>⚛️ 2. Chemical Verification</h3>
                     <div style={styles.item}>
                         <input type="checkbox" style={styles.checkbox} checked={protocols.ftirVerification} onChange={() => handleToggle('ftirVerification')} />
-                        <span style={styles.label}><strong>Particle Verification:</strong> Verified a subset using $\mu$-FTIR Spectroscopy? </span>
+                        <span style={styles.label}><strong>Particle Verification:</strong> Verified a subset using μ-FTIR Spectroscopy? </span>
                     </div>
                 </section>
 
