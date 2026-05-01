@@ -12,6 +12,28 @@
 # 3. Process results
 # 4. Store in DB
 # 5. Send response back
+#
+# Upload flow in djangoproject:
+# - Frontend posts files to /detect/ (myapp/urls.py -> detect_marine_waste)
+# - myapp/views.py handles the request and loops through uploaded images
+# - Each image is analyzed by YOLO via myapp/views.py using `best.pt`
+# - Hazard analytics and risk scoring happen in myapp/views.py
+# - RAG report generation uses myapp/Newbrain.py and the local vector DB folder
+# - Results are saved into the SQLite backend via myapp/models.py (MarineWasteDetection)
+# - Response JSON is returned to the frontend with annotated images, graphs, and metrics
+#
+# Files activated during upload flow:
+# - djangoproject/myapp/urls.py
+# - djangoproject/myapp/views.py
+# - djangoproject/myapp/models.py
+# - djangoproject/myapp/serializers.py
+# - djangoproject/myapp/Newbrain.py
+# - djangoproject/marine_brain_new/ (vector database folder)
+# - djangoproject/risk_model.pkl
+# - djangoproject/best.pt
+# - djangoproject/best_weathering.pt
+# - djangoproject/age_classifier_v2.h5
+# - djangoproject/db.sqlite3
 # =============================================================
 
 import uuid  # used to generate unique batch IDs

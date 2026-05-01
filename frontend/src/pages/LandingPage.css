@@ -1,36 +1,56 @@
-/* GLOBAL CONTAINER */
+/* =========================================
+   GLOBAL CONTAINER
+========================================= */
 .container {
     max-width: 1150px;
     margin: auto;
     padding: 0 20px;
 }
 
-/* HERO SECTION */
+/* =========================================
+   🌊 GLOBAL VIDEO BACKGROUND
+========================================= */
+.global-video-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2; /* Keeps it behind all content */
+    overflow: hidden;
+}
+
+.global-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8) contrast(1.1); /* Slightly darkens video for text readability */
+}
+
+/* Creates a natural gradient that darkens as you scroll down */
+.global-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom, 
+        rgba(0, 0, 0, 0.3) 0%, 
+        rgba(15, 32, 39, 0.85) 80%,
+        rgba(15, 32, 39, 1) 100%
+    );
+}
+
+/* =========================================
+   HERO SECTION
+========================================= */
 .hero {
     position: relative;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    /* Transparent background so the global video shows through */
 }
 
-.hero-video {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.7) contrast(1.1);
-}
-
-.hero-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
-}
-
-/* HERO CONTENT */
 .hero-content {
     position: relative;
     text-align: center;
@@ -71,9 +91,10 @@
     font-weight: 600;
     transition: all 0.3s ease;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
 }
 
-/* 🔥 PRIMARY BUTTON (UPGRADED) */
 .btn-primary {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
@@ -85,9 +106,8 @@
     box-shadow: 0 15px 40px rgba(0, 114, 255, 0.6);
 }
 
-/* OUTLINE BUTTON */
 .btn-outline {
-    border: 1px solid rgba(255,255,255,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     color: white;
     backdrop-filter: blur(6px);
 }
@@ -97,25 +117,27 @@
     color: black;
 }
 
-/* FEATURES SECTION */
-.section-dark {
+/* =========================================
+   FEATURES SECTION (Transparent Glassmorphism)
+========================================= */
+.section-transparent {
     position: relative;
-    background: linear-gradient(135deg, #0f2027, #1b3a4b, #2c5364);
+    background: rgba(15, 32, 39, 0.4); /* Semi-transparent background */
     padding: 100px 0;
     color: white;
-    overflow: hidden;
 }
 
-/* ✨ subtle glow effect */
-.section-dark::before {
+/* Subtle background glow effect behind the cards */
+.section-transparent::before {
     content: '';
     position: absolute;
     top: -100px;
     left: -100px;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(0,255,200,0.15), transparent);
+    background: radial-gradient(circle, rgba(0, 255, 200, 0.10), transparent);
     filter: blur(100px);
+    z-index: -1;
 }
 
 /* TITLE */
@@ -141,25 +163,25 @@
     gap: 35px;
 }
 
-/* 🔥 FEATURE CARDS (MAJOR UPGRADE) */
+/* FEATURE CARDS */
 .feature-item {
     position: relative;
     padding: 35px;
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
     transition: all 0.35s ease;
     overflow: hidden;
 }
 
-/* glowing hover layer */
+/* Glowing hover layer on cards */
 .feature-item::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, transparent, rgba(0,255,200,0.15), transparent);
+    background: linear-gradient(120deg, transparent, rgba(0, 255, 200, 0.15), transparent);
     opacity: 0;
     transition: 0.4s;
 }
@@ -168,19 +190,17 @@
     opacity: 1;
 }
 
-/* hover motion */
+/* Hover lift and border glow */
 .feature-item:hover {
     transform: translateY(-12px) scale(1.03);
-    border-color: rgba(0,255,200,0.3);
+    border-color: rgba(0, 255, 200, 0.3);
 }
 
-/* ICON */
 .icon {
     font-size: 2.3rem;
     margin-bottom: 15px;
 }
 
-/* TEXT */
 .feature-item h3 {
     margin-bottom: 10px;
     font-size: 1.4rem;

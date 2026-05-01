@@ -2,11 +2,15 @@
 import React, { useState, useMemo } from 'react';
 import axios from 'axios';
 import { ShieldAlert, Activity, BarChart3, UploadCloud, PieChart, Info } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const Analysiss = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
+    const styles = getStyles(isDark);
 
     const onFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -160,33 +164,31 @@ const Analysiss = () => {
     );
 };
 
-const styles = {
-    container: { padding: '40px 10%', backgroundColor: '#f8fafc', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' },
-    header: { textAlign: 'center', marginBottom: '40px' },
-    badge: { fontSize: '0.4em', background: '#0077be', color: 'white', padding: '4px 10px', borderRadius: '4px', verticalAlign: 'middle' },
-    uploadSection: { background: 'white', padding: '40px', borderRadius: '16px', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', marginBottom: '40px' },
-    fileInput: { marginBottom: '15px', padding: '10px' },
-    btn: { background: '#0077be', color: 'white', padding: '14px 28px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '1rem' },
-    
+const getStyles = (isDark) => ({
+    container: { padding: '40px 10%', backgroundColor: isDark ? '#0b1117' : '#f8fafc', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif' },
+    header: { textAlign: 'center', marginBottom: '40px', color: isDark ? '#e3e8ee' : '#0f172a' },
+    badge: { fontSize: '0.4em', background: isDark ? '#0f6995' : '#0077be', color: 'white', padding: '4px 10px', borderRadius: '4px', verticalAlign: 'middle' },
+    uploadSection: { background: isDark ? 'rgba(255,255,255,0.04)' : 'white', padding: '40px', borderRadius: '16px', textAlign: 'center', boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.35)' : '0 4px 20px rgba(0,0,0,0.05)', marginBottom: '40px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : 'none' },
+    fileInput: { marginBottom: '15px', padding: '10px', background: isDark ? '#111820' : 'white', color: isDark ? '#e3e8ee' : '#111827', border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid #d1d5db' },
     // Dashboard Stats
     statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '40px' },
-    statCard: { background: 'white', padding: '25px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', textAlign: 'center', borderBottom: '4px solid #0077be' },
-    statTitle: { fontSize: '0.9rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase' },
-    statValue: { fontSize: '2rem', color: '#1e293b', fontWeight: '800', marginTop: '5px' },
+    statCard: { background: isDark ? 'rgba(255,255,255,0.05)' : 'white', padding: '25px', borderRadius: '12px', boxShadow: isDark ? '0 2px 12px rgba(0,0,0,0.3)' : '0 2px 10px rgba(0,0,0,0.03)', textAlign: 'center', borderBottom: `4px solid ${isDark ? '#4dd0b4' : '#0077be'}` },
+    statTitle: { fontSize: '0.9rem', color: isDark ? '#94a3b8' : '#64748b', fontWeight: '600', textTransform: 'uppercase' },
+    statValue: { fontSize: '2rem', color: isDark ? '#7dd3fc' : '#1e293b', fontWeight: '800', marginTop: '5px' },
 
     // Batch Results
     batchWrapper: { marginBottom: '80px', animation: 'fadeIn 0.5s ease-in' },
-    fileHeader: { background: '#1e293b', color: 'white', padding: '12px 20px', borderRadius: '8px 8px 0 0', display: 'flex', alignItems: 'center', gap: '10px' },
-    resultsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', background: '#e2e8f0', border: '1px solid #e2e8f0', borderRadius: '0 0 8px 8px', overflow: 'hidden' },
-    card: { background: 'white', padding: '20px' },
-    tableCard: { gridColumn: 'span 2', background: 'white', padding: '20px', borderTop: '1px solid #e2e8f0' },
-    cardTitle: { fontSize: '1.1rem', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px', color: '#334155' },
-    resultImg: { width: '100%', borderRadius: '6px', border: '1px solid #f1f5f9' },
+    fileHeader: { background: isDark ? '#111820' : '#1e293b', color: isDark ? '#e3e8ee' : 'white', padding: '12px 20px', borderRadius: '8px 8px 0 0', display: 'flex', alignItems: 'center', gap: '10px' },
+    resultsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', background: isDark ? '#0f1720' : '#e2e8f0', border: isDark ? '1px solid #17212b' : '1px solid #e2e8f0', borderRadius: '0 0 8px 8px', overflow: 'hidden' },
+    card: { background: isDark ? '#111820' : 'white', padding: '20px', color: isDark ? '#e3e8ee' : '#111827' },
+    tableCard: { gridColumn: 'span 2', background: isDark ? '#111820' : 'white', padding: '20px', borderTop: isDark ? '1px solid #17212b' : '1px solid #e2e8f0' },
+    cardTitle: { fontSize: '1.1rem', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px', color: isDark ? '#e3e8ee' : '#334155' },
+    resultImg: { width: '100%', borderRadius: '6px', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #f1f5f9' },
     
     table: { width: '100%', borderCollapse: 'collapse' },
-    th: { textAlign: 'left', padding: '12px', background: '#f8fafc', color: '#64748b', fontSize: '0.85rem' },
-    td: { padding: '12px', borderBottom: '1px solid #f1f5f9', fontSize: '0.95rem' },
-    prioBadge: { padding: '3px 10px', borderRadius: '12px', color: 'white', fontSize: '0.7rem', fontWeight: 'bold' }
-};
+    th: { textAlign: 'left', padding: '12px', background: isDark ? '#111820' : '#f8fafc', color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.85rem' },
+    td: { padding: '12px', borderBottom: isDark ? '1px solid #17212b' : '1px solid #f1f5f9', fontSize: '0.95rem', color: isDark ? '#e3e8ee' : '#0f172a' },
+    prioBadge: { padding: '3px 10px', borderRadius: '12px', color: 'white', fontSize: '0.7rem', fontWeight: 'bold', background: isDark ? '#0f1720' : '#0077be' }
+});
 
 export default Analysiss;

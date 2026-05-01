@@ -10,43 +10,48 @@ import { SummaryStatsContext } from "../context/SummaryStatsContext";
 
 // ---------- STYLES ----------
 const pageStyles = `
-.results-dashboard { padding: 2rem; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; background: #f4f7f6; }
+.theme-wrapper {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.results-dashboard { padding: 2rem; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; background: var(--bg-color); }
 .dashboard-header { text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 1rem; }
-.dashboard-header h1 { color: #2c3e50; }
+.dashboard-header h1 { color: var(--text-primary); }
 
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.stat-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; }
+.stat-card { background: var(--surface); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; }
 .stat-value { font-size: 2.2rem; font-weight: 700; color: #2980b9; }
 
 .research-summary-card {
-    background: #fff;
-    border-left: 8px solid #0077be;
+    background: var(--surface);
+    border-left: 8px solid var(--accent);
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
-.research-summary-card p { white-space: pre-wrap; line-height: 1.8; color: #34495e; font-size: 1rem; }
+.research-summary-card p { white-space: pre-wrap; line-height: 1.8; color: var(--text-primary); font-size: 1rem; }
 
 .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.results-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+.results-card { background: var(--surface); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
 
 .summary-table { width: 100%; border-collapse: collapse; }
-.summary-table td { padding: 0.8rem; border-bottom: 1px solid #f0f0f0; }
+.summary-table td { padding: 0.8rem; border-bottom: 1px solid rgba(0,0,0,0.08); }
 .summary-table td:last-child { font-weight: 600; text-align: right; }
 
 /* GALLERY STYLES */
 .image-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 .gallery-item { 
-    border: 1px solid #eee; 
+    border: 1px solid rgba(0,0,0,0.08); 
     border-radius: 8px; 
     overflow: hidden; 
-    background: #fff; 
+    background: var(--surface); 
     cursor: pointer; 
     transition: transform 0.2s ease;
 }
 .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
 .gallery-item img { width: 100%; display: block; height: 200px; object-fit: cover; }
-.gallery-label { padding: 0.8rem; font-size: 0.85rem; text-align: center; background: #f9f9f9; }
+.gallery-label { padding: 0.8rem; font-size: 0.85rem; text-align: center; background: var(--surface); }
 
 /* MODAL STYLES */
 .modal-overlay {
@@ -59,7 +64,7 @@ const pageStyles = `
     z-index: 9999;
 }
 .modal-content { position: relative; max-width: 90vw; max-height: 90vh; }
-.modal-content img { width: 100%; height: auto; border-radius: 8px; border: 3px solid white; }
+.modal-content img { width: 100%; height: auto; border-radius: 8px; border: 3px solid var(--surface); }
 .close-button {
     position: absolute;
     top: -40px;
@@ -82,7 +87,7 @@ const pageStyles = `
     z-index: 10001;
 }
 .report-modal-container {
-    background: #fff;
+    background: var(--surface);
     width: 90%;
     max-width: 850px;
     max-height: 85vh;
@@ -93,7 +98,7 @@ const pageStyles = `
 }
 .report-modal-header {
     padding: 20px;
-    background: #0077be;
+    background: var(--accent);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -102,11 +107,53 @@ const pageStyles = `
 .report-modal-body {
     padding: 30px;
     overflow-y: auto;
-    color: #2c3e50;
+    color: var(--text-primary);
     line-height: 1.8;
 }
-.report-modal-body h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+.report-modal-body h2 { border-bottom: 2px solid rgba(0,0,0,0.08); padding-bottom: 10px; margin-bottom: 20px; }
 .report-modal-body p { white-space: pre-wrap; margin-bottom: 20px; }
+
+body[data-theme='dark'] .results-dashboard {
+    background: transparent !important;
+    color: var(--text-primary);
+}
+body[data-theme='dark'] .results-dashboard .dashboard-header {
+    border-bottom-color: rgba(255,255,255,0.14);
+}
+body[data-theme='dark'] .results-dashboard .dashboard-header h1 {
+    color: var(--text-primary);
+}
+body[data-theme='dark'] .results-dashboard .stat-card,
+body[data-theme='dark'] .results-dashboard .research-summary-card,
+body[data-theme='dark'] .results-dashboard .results-card,
+body[data-theme='dark'] .results-dashboard .gallery-item,
+body[data-theme='dark'] .results-dashboard .summary-table th,
+body[data-theme='dark'] .results-dashboard .summary-table td,
+body[data-theme='dark'] .results-dashboard .gallery-label {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+body[data-theme='dark'] .results-dashboard .research-summary-card {
+    border-left-color: var(--accent);
+}
+body[data-theme='dark'] .results-dashboard .summary-table th {
+    background: rgba(255,255,255,0.06);
+}
+body[data-theme='dark'] .results-dashboard .report-modal-container {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+body[data-theme='dark'] .results-dashboard .report-modal-body {
+    color: var(--text-primary);
+}
+body[data-theme='dark'] .results-dashboard .modal-content img {
+    border-color: rgba(255,255,255,0.12);
+}
+body[data-theme='dark'] .results-dashboard .close-button {
+    color: white;
+}
 
 @media print {
     .modal-overlay, .report-modal-overlay, .actions-panel, header { display: none !important; }
@@ -116,7 +163,7 @@ const pageStyles = `
 `;
 
 const ResultsPage = () => {
-    const { id } = useParams();
+    const { id: urlId } = useParams();
     const location = useLocation();
     const componentRef = useRef(null);
     const [data, setData] = useState(location.state?.analysisData || null);
@@ -124,7 +171,7 @@ const ResultsPage = () => {
     const [selectedImage, setSelectedImage] = useState(null); 
     const [showReportModal, setShowReportModal] = useState(false); // New state
     const { setSummaryStats } = useContext(SummaryStatsContext);
-
+    const batchId = urlId || data?.batch_id || 'Unknown';
    const handleDownloadPDF = () => {
         if (!analytics?.research) {
             alert("Report data is not available yet.");
@@ -146,7 +193,7 @@ const ResultsPage = () => {
                 <h1 style="color: #0077be; text-align: center; border-bottom: 2px solid #0077be; padding-bottom: 10px; margin-bottom: 20px;">
                     MarineInsight Scientific Assessment
                 </h1>
-                <h3 style="color: #34495e;">Batch ID: ${id}</h3>
+                <h3 style="color: #34495e;">Batch ID: ${batchId}</h3>
                 <div style="white-space: pre-wrap; line-height: 1.8; font-size: 14px; text-align: justify;">
                     ${formattedText}
                 </div>
@@ -155,7 +202,7 @@ const ResultsPage = () => {
 
         const opt = {
             margin:       0.5,
-            filename:     `MarineInsight_Report_Batch_${id}.pdf`,
+            filename:     `MarineInsight_Report_Batch_${batchId}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true, logging: false },
             jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
@@ -176,7 +223,7 @@ const ResultsPage = () => {
             (img.detection_details || []).forEach(det => {
                 const areaPx = Number(det.area) || 0;
                 const areaMm2 = (areaPx * PIXEL_TO_MM2).toFixed(4);
-                rows.push([id, `"${img.image_name || 'Frame'}"`, `"${det.type}"`, areaPx, areaMm2].join(","));
+                rows.push([batchId, `"${img.filename || img.image_name || 'Frame'}"`, `"${det.type}"`, areaPx, areaMm2].join(","));
             });
         });
         const csvString = [headers.join(","), ...rows].join("\n");
@@ -184,7 +231,7 @@ const ResultsPage = () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", `MarineInsight_Batch_${id}.csv`);
+        link.setAttribute("download", `MarineInsight_Batch_${batchId}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -193,12 +240,12 @@ const ResultsPage = () => {
     useEffect(() => {
         if (!data && id) {
             setLoading(true);
-            axios.get(`http://127.0.0.1:8000/api/batch/${id}/`)
+            axios.get(`http://127.0.0.1:8000/api/batch/${batchId}/`)
                 .then(res => setData(res.data))
                 .catch(err => console.error("API Error:", err))
                 .finally(() => setLoading(false));
         }
-    }, [id, data]);
+    }, [urlId, data]);
 
     const analytics = useMemo(() => {
         if (!data?.results) return null;
@@ -235,7 +282,7 @@ const ResultsPage = () => {
     if (loading) return <div style={{textAlign: "center", padding: 100}}>Generating Report...</div>;
 
     return (
-        <div style={{ backgroundColor: '#f4f7f6', minHeight: '100vh' }}>
+        <div className="theme-wrapper" style={{ minHeight: '100vh' }}>
             <Header type="main" />
             <style>{pageStyles}</style>
 
@@ -261,7 +308,7 @@ const ResultsPage = () => {
                 <div className="results-dashboard">
                     <header className="dashboard-header">
                         <h1>Microplastic Analysis Batch Report</h1>
-                        <p>ID: {id}</p>
+                        <p>ID: {batchId}</p>
                     </header>
 
                     {analytics && (
@@ -299,7 +346,7 @@ const ResultsPage = () => {
                                         <div key={i} className="gallery-item" onClick={() => setSelectedImage(img)}>
                                             <img src={img.annotated_image || img.processed_image_url} alt="analysis" />
                                             <div className="gallery-label">
-                                                <strong>{img.image_name || `Frame ${i + 1}`}</strong>
+                                                <strong>{img.filename || img.image_name || `Frame ${i + 1}`}</strong>
                                             </div>
                                         </div>
                                     ))}

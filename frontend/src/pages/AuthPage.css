@@ -1,38 +1,13 @@
 .auth-page {
-    /* The gradient background */
-    background: linear-gradient(-45deg, #007bff, #28a745, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient-animation 15s ease infinite;
-    
-    /* Keep the centering styles */
+    background: #f8f9fa;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    position: relative; /* Important for the particles */
-    overflow: hidden;   /* Hide anything that goes outside the screen */
-}
-
-/* Keyframes animation to move the gradient */
-@keyframes gradient-animation {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-.auth-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    color: #102a43;
 }
 
 .auth-container {

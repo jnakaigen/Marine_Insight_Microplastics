@@ -15,33 +15,33 @@ gsap.registerPlugin(ScrollTrigger);
 const LandingPage = () => {
     const main = useRef();
 
-useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    useGSAP(() => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    // HERO animation
-    tl.from('.hero-content h1', { opacity: 0, y: 80, duration: 1 });
-    tl.from('.hero-content p', { opacity: 0, y: 40, duration: 0.8 }, "-=0.6");
-    tl.from('.hero-buttons', { opacity: 0, scale: 0.8, duration: 0.5 }, "-=0.5");
+        // HERO animation
+        tl.from('.hero-content h1', { opacity: 0, y: 80, duration: 1 });
+        tl.from('.hero-content p', { opacity: 0, y: 40, duration: 0.8 }, "-=0.6");
+        tl.from('.hero-buttons', { opacity: 0, scale: 0.8, duration: 0.5 }, "-=0.5");
 
-    // ✅ FIX: animate each card individually
-    gsap.utils.toArray('.feature-item').forEach((item, i) => {
-        gsap.from(item, {
-            scrollTrigger: {
-                trigger: item,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-            },
-            opacity: 0,
-            y: 60,
-            duration: 0.6,
-            delay: i * 0.1, // nice stagger feel
+        // FEATURE CARDS animation
+        gsap.utils.toArray('.feature-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                },
+                opacity: 0,
+                y: 60,
+                duration: 0.6,
+                delay: i * 0.1, // nice stagger feel
+            });
         });
-    });
 
-    // ✅ Force recalculation (important on refresh)
-    ScrollTrigger.refresh();
+        // Force recalculation (important on refresh)
+        ScrollTrigger.refresh();
 
-}, { scope: main, revertOnUpdate: true });
+    }, { scope: main, revertOnUpdate: true });
 
     return (
         <>
@@ -49,14 +49,17 @@ useGSAP(() => {
 
             <main ref={main}>
 
-                {/* HERO SECTION */}
-                <section className="hero">
-                    <video autoPlay loop muted playsInline className="hero-video">
+                {/* 🌊 GLOBAL VIDEO BACKGROUND */}
+                <div className="global-video-wrapper">
+                    <video autoPlay loop muted playsInline className="global-video">
                         <source src={heroVideo} type="video/mp4" />
                     </video>
+                    {/* Gradient Overlay to blend it naturally as you scroll */}
+                    <div className="global-video-overlay"></div>
+                </div>
 
-                    <div className="hero-overlay"></div>
-
+                {/* HERO SECTION */}
+                <section className="hero">
                     <div className="container hero-content">
                         <h1>
                             See the Invisible.<br />
@@ -77,13 +80,13 @@ useGSAP(() => {
                 </section>
 
                 {/* FEATURES SECTION */}
-                <section id="features" className="section-dark">
+                <section id="features" className="section-transparent">
                     <div className="container">
 
                         <h2 className="section-title">Built for Real Research</h2>
 
                         <p className="section-subtitle">
-                            Not another gimmick tool. A full pipeline — from detection to reporting.
+                            Not another gimmick tool. A full pipeline - from detection to reporting.
                         </p>
 
                         <div className="features-grid">
@@ -92,7 +95,7 @@ useGSAP(() => {
                                 <div className="icon">⚡</div>
                                 <h3>Instant Detection</h3>
                                 <p>
-                                    AI automatically detects particles — even the smallest ones.
+                                    AI automatically detects particles - even the smallest ones.
                                 </p>
                             </div>
 
@@ -100,7 +103,7 @@ useGSAP(() => {
                                 <div className="icon">🧬</div>
                                 <h3>Smart Classification</h3>
                                 <p>
-                                    Fibers, fragments, films — classified using deep learning precision.
+                                    Fibers, fragments, films, pellets - classified using deep learning precision.
                                 </p>
                             </div>
 

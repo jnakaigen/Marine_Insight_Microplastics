@@ -1,4 +1,5 @@
 import React from 'react';
+import Layout from '../components/Layout';
 import './EduAwareness.css';
 import imgGlobalPresence from '../assets/edu/global-presence.jpeg';
 import imgMorphologies from '../assets/edu/morphologies.jpeg';
@@ -8,7 +9,8 @@ import impFishBivalve from '../assets/edu/fish-bivalve.jpeg';
 import imgFragmentation from '../assets/edu/fragmentation.jpeg';
 const EduAwareness = () => {
     return (
-        <div className="marine-viewport">
+        <Layout>
+            <div className="marine-viewport">
             <div className="ocean-overlay"></div>
             
             {/* Animated Bubble Engine - Visualizing the aquatic environment */}
@@ -267,6 +269,7 @@ const EduAwareness = () => {
                 </div>
             </div>
         </div>
+      </Layout>
     );
 };
 

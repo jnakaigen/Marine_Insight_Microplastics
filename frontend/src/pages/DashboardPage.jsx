@@ -39,7 +39,32 @@ const DashboardPage = () => {
             stagger: 0.08,
             clearProps: "all" // Cleans up inline styles after animation so hover effects work
         });
-    }, { scope: container, dependencies: [searchQuery, isLoading] });
+    }, { scope: container, dependencies: [searchQuery, isLoading, analyses] });
+
+    const handleDelete = async (batchId, location) => {
+        const confirmed = window.confirm(
+            `Delete this batch permanently? This will remove the analysis results for "${location || 'this batch'}" and cannot be undone.`
+        );
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/delete/batch/${batchId}/`, {
+                method: 'DELETE',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) {
+                const result = await response.json().catch(() => ({}));
+                throw new Error(result.error || response.statusText || 'Delete failed');
+            }
+
+            setAnalyses((prev) => prev.filter((batch) => batch.batch_id !== batchId));
+            alert('Batch deleted successfully.');
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert(`Could not delete batch: ${error.message}`);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -118,15 +143,34 @@ const DashboardPage = () => {
                                 </div>
                                 
                                 <div className="card-body">
-                                    <h3 className="card-location">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                        {mainDisplay.sampling_location || 'Shared Batch'}
-                                    </h3>
-                                    
-                                    <p className="card-date">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                        {batch.last_created ? new Date(batch.last_created).toLocaleString() : "Date N/A"}
-                                    </p>
+                                    <div className="card-meta-top">
+                                        <div>
+                                            <h3 className="card-location">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                {mainDisplay.sampling_location || 'Shared Batch'}
+                                            </h3>
+                                            <p className="card-date">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                {batch.last_created ? new Date(batch.last_created).toLocaleString() : "Date N/A"}
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className="delete-icon-btn"
+                                            onClick={() => handleDelete(batch.batch_id, mainDisplay.sampling_location)}
+                                            aria-label="Delete batch"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M3 6h18"></path>
+                                                <path d="M8 6v12"></path>
+                                                <path d="M16 6v12"></path>
+                                                <path d="M5 6l1-3h12l1 3"></path>
+                                                <path d="M9 10v8"></path>
+                                                <path d="M15 10v8"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
 
                                     <div className="tags-container">
                                         {Object.entries(batch.summary).map(([type, count]) => (
