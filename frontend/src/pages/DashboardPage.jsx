@@ -12,17 +12,28 @@ const DashboardPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/dashboard/')
-            .then(res => res.json())
-            .then(data => {
-                setAnalyses(data);
-                setIsLoading(false);
+            const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
+
+            fetch('http://127.0.0.1:8000/api/dashboard/', {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Pass Token
+                    'Content-Type': 'application/json'
+                }
             })
-            .catch(err => {
-                console.error("Error fetching dashboard data:", err);
-                setIsLoading(false);
-            });
-    }, []);
+                .then(res => {
+                    if (!res.ok) throw new Error("Unauthorized or Network Error");
+                    return res.json();
+                })
+                .then(data => {
+                    setAnalyses(data);
+                    setIsLoading(false);
+                })
+                .catch(err => {
+                    console.error("Error fetching dashboard data:", err);
+                    setIsLoading(false);
+                    // Optional: navigate('/login') if token expired
+                });
+        }, []);
 
     const filteredAnalyses = analyses.filter(batch => {
         const location = batch.detections[0]?.sampling_location || 'Shared Batch';
@@ -42,29 +53,34 @@ const DashboardPage = () => {
     }, { scope: container, dependencies: [searchQuery, isLoading, analyses] });
 
     const handleDelete = async (batchId, location) => {
-        const confirmed = window.confirm(
-            `Delete this batch permanently? This will remove the analysis results for "${location || 'this batch'}" and cannot be undone.`
-        );
-        if (!confirmed) return;
+            const confirmed = window.confirm(
+                `Delete this batch permanently? This will remove the analysis results for "${location || 'this batch'}" and cannot be undone.`
+            );
+            if (!confirmed) return;
 
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/delete/batch/${batchId}/`, {
-                method: 'DELETE',
-                headers: { 'Accept': 'application/json' }
-            });
+            const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
 
-            if (!response.ok) {
-                const result = await response.json().catch(() => ({}));
-                throw new Error(result.error || response.statusText || 'Delete failed');
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/delete/batch/${batchId}/`, {
+                    method: 'DELETE',
+                    headers: { 
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}` // Pass Token
+                    }
+                });
+
+                if (!response.ok) {
+                    const result = await response.json().catch(() => ({}));
+                    throw new Error(result.error || response.statusText || 'Delete failed');
+                }
+
+                setAnalyses((prev) => prev.filter((batch) => batch.batch_id !== batchId));
+                alert('Batch deleted successfully.');
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert(`Could not delete batch: ${error.message}`);
             }
-
-            setAnalyses((prev) => prev.filter((batch) => batch.batch_id !== batchId));
-            alert('Batch deleted successfully.');
-        } catch (error) {
-            console.error('Delete error:', error);
-            alert(`Could not delete batch: ${error.message}`);
-        }
-    };
+        };
 
     if (isLoading) {
         return (
@@ -114,13 +130,25 @@ const DashboardPage = () => {
 
                 {/* Grid Section */}
                 <div className="analysis-grid-modern">
-                    {filteredAnalyses.length === 0 && (
-                        <div className="empty-state">
-                            <div className="empty-icon">🔍</div>
-                            <h3>No results found</h3>
-                            <p>We couldn't find any batches matching "{searchQuery}".</p>
-                        </div>
-                    )}
+                {filteredAnalyses.length === 0 && (
+                    <div className="empty-state">
+                        {searchQuery ? (
+                            /* What to show if they typed a search that failed */
+                            <>
+                                <div className="empty-icon">🔍</div>
+                                <h3>No results found</h3>
+                                <p>We couldn't find any batches matching "{searchQuery}".</p>
+                            </>
+                        ) : (
+                            /* What to show if their dashboard is just empty */
+                            <>
+                                <div className="empty-icon">🌊</div>
+                                <h3>No Analyses Yet</h3>
+                                <p>You haven't uploaded any water samples for analysis. Click "New Analysis" in the top right to get started!</p>
+                            </>
+                        )}
+                    </div>
+                )}
 
                     {filteredAnalyses.map(batch => {
                         const mainDisplay = batch.detections[0] || {};

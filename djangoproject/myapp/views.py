@@ -1,46 +1,42 @@
-# The traffic cop. When a user clicks a button or uploads an image on the frontend, a function in views.py runs, calls your AI models, and returns the result.
-# Takes input (image, text, etc.)
-# Runs AI models (YOLO, ML, RAG)
-# Processes results
-# Saves to database
-# Sends response back
-
 # ==========================================
 # 1. IMPORTS SECTION
 # ==========================================
 import uuid 
-from django.shortcuts import render 
 import os 
-from django.conf import settings 
 import cv2 
-from rest_framework.response import Response   
-import pandas as pd 
-
-from django.http import JsonResponse 
-from django.views.decorators.csrf import csrf_exempt 
-from myapp.serializers import MarineWasteDetectionSerializer 
-from ultralytics import YOLO 
-from tensorflow.keras.models import load_model 
 import io 
 import base64 
-from PIL import Image 
+import joblib 
 import numpy as np 
-from .models import MarineWasteDetection 
-from django.db.models import Count  
-from django.db.models import Max 
-from datetime import datetime 
-from django.utils import timezone 
-import matplotlib.pyplot as plt 
+import pandas as pd 
 import matplotlib 
+import matplotlib.pyplot as plt 
+import chromadb
+
+from django.shortcuts import render 
+from django.conf import settings 
+from django.http import JsonResponse 
+from django.views.decorators.csrf import csrf_exempt 
+from django.db.models import Count, Max, F, Sum
+from django.utils import timezone 
 from django.contrib.auth.models import User 
+from django.contrib.auth import authenticate
+
+from rest_framework.response import Response   
 from rest_framework.permissions import IsAuthenticated, AllowAny 
 from rest_framework.decorators import api_view, parser_classes, permission_classes 
 from rest_framework.parsers import MultiPartParser, FormParser 
 from rest_framework import status 
-import joblib 
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from PIL import Image 
+from ultralytics import YOLO 
+from tensorflow.keras.models import load_model 
 from langchain_huggingface import HuggingFaceEmbeddings 
 from langchain_chroma import Chroma 
+
+from myapp.serializers import MarineWasteDetectionSerializer 
+from .models import MarineWasteDetection 
 from .Newbrain import generate_scientific_report 
 
 # ==========================================
@@ -96,7 +92,6 @@ if not os.path.exists(DB_PATH):
 
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-import chromadb
 persistent_client = chromadb.PersistentClient(path=DB_PATH)
 
 vector_db = Chroma(
@@ -131,7 +126,7 @@ model = YOLO('best.pt')
 @csrf_exempt 
 @api_view(['POST']) 
 @parser_classes([MultiPartParser, FormParser]) 
-@permission_classes([AllowAny]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def detect_marine_waste(request):
     files = request.FILES.getlist('files')
     if not files:
@@ -144,6 +139,7 @@ def detect_marine_waste(request):
 
     if timestamp_str:
         try:
+            from datetime import datetime
             dt = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
             analysis_time = timezone.make_aware(dt, timezone.get_current_timezone())
         except (ValueError, TypeError):
@@ -151,7 +147,6 @@ def detect_marine_waste(request):
 
     all_image_results = []
     batch_id = uuid.uuid4() 
-    FEATURE_NAMES = ["total_count", "fiber_ratio", "pellet_ratio", "fragment_ratio", "film_ratio", "avg_area", "min_area"]
 
     for file in files:
         image_data = file.read()
@@ -229,14 +224,13 @@ def detect_marine_waste(request):
 
         # --- Phase 6: Database Persistence ---
         db_entry = MarineWasteDetection.objects.create(
-            user=request.user if request.user.is_authenticated else None,
+            user=request.user, # Tied strictly to the logged-in user
             batch_id=batch_id,
             filename=file.name,
             total_detections=len(found_items),
             annotated_image_base64=f"data:image/jpeg;base64,{annotated_base64}",
             graph_image_base64=f"data:image/png;base64,{graph_base64}" if graph_base64 else None,
             detection_details=found_items, 
-            
             analysis_timestamp=analysis_time,
             ecological_risk_score=risk_score,
             ecological_risk_level=risk_level,
@@ -287,9 +281,6 @@ def signup_view(request):
     User.objects.create_user(username=username, password=password)
     return Response({"message": "Success! You can now Login."}, status=201)
 
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def custom_login(request):
@@ -315,17 +306,14 @@ def custom_login(request):
 # ==========================================
 # 8. DATA FETCHING ENDPOINTS (FOR FRONTEND)
 # ==========================================
-from django.db.models import F, Sum
-import json
-
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated]) # SECURED
 def get_dashboard_data(request):
-    batch_ids = MarineWasteDetection.objects.values_list('batch_id', flat=True).distinct()
+    batch_ids = MarineWasteDetection.objects.filter(user=request.user).values_list('batch_id', flat=True).distinct()
     dashboard = []
 
     for b_id in batch_ids:
-        detections = MarineWasteDetection.objects.filter(batch_id=b_id)
+        detections = MarineWasteDetection.objects.filter(batch_id=b_id, user=request.user)
         if not detections.exists():
             continue
 
@@ -361,19 +349,23 @@ def get_dashboard_data(request):
     return Response(dashboard)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated]) # SECURED
 def get_single_detection(request, detection_id):
     try:
-        detection = MarineWasteDetection.objects.get(id=detection_id)
+        detection = MarineWasteDetection.objects.get(id=detection_id, user=request.user)
         serializer = MarineWasteDetectionSerializer(detection) 
         return Response(serializer.data)
     except MarineWasteDetection.DoesNotExist:
-        return Response({"error": "Detection not found"}, status=404)
+        return Response({"error": "Detection not found or unauthorized"}, status=404)
     
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated]) # SECURED
 def get_batch_results(request, batch_id):
-    detections = MarineWasteDetection.objects.filter(batch_id=batch_id)
+    detections = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user)
+    
+    if not detections.exists():
+        return Response({"error": "Batch not found or unauthorized."}, status=status.HTTP_404_NOT_FOUND)
+
     results = []
     for d in detections:
         results.append({
@@ -394,14 +386,12 @@ def get_batch_results(request, batch_id):
         "results": results
     })
 
-
 @api_view(['DELETE'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated]) # SECURED
 def delete_batch(request, batch_id):
-    """Deletes all detections tied to a batch upload."""
-    deleted_count, _ = MarineWasteDetection.objects.filter(batch_id=batch_id).delete()
+    deleted_count, _ = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user).delete()
     if deleted_count == 0:
-        return Response({"error": "Batch not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Batch not found or unauthorized."}, status=status.HTTP_404_NOT_FOUND)
     return Response({"message": "Batch deleted successfully.", "batch_id": str(batch_id)}, status=status.HTTP_200_OK)
 
 
@@ -439,8 +429,6 @@ def calculate_physical_hazard(found_items):
     max_hp = 0.0
     max_s_rank = 0.0
     max_sh_rank = 0.0
-    
-    # NEW: Trackers for the worst-case particle's identity
     max_shape_str = "Unknown"
     max_size_str = "Unknown"
     
@@ -474,7 +462,6 @@ def calculate_physical_hazard(found_items):
         item["size_rank"] = s_rank
         item["shape_rank"] = sh_rank
         
-        # NEW: If this is the worst particle we've seen, remember its shape and size
         if hp_score > max_hp:
             max_hp = hp_score
             max_s_rank = s_rank
@@ -495,8 +482,8 @@ def calculate_physical_hazard(found_items):
 
     return {
         "max_Hp": round(max_hp, 2),
-        "max_hp_shape": max_shape_str.capitalize(), # NEW output
-        "max_hp_size_bin": max_size_str,            # NEW output
+        "max_hp_shape": max_shape_str.capitalize(), 
+        "max_hp_size_bin": max_size_str,            
         "dominant_shape": dom_shape.capitalize(),
         "dominant_size_bin": dom_size,
         "critical_size_flag": critical_size_flag,

@@ -1,6 +1,6 @@
 .app-footer {
-    background-color: #343a40;
-    color: #fff;
+    background-color: rgba(3, 19, 35, 0.95);
+    color: var(--text-secondary);
     padding: 40px 0;
     text-align: center;
 }
@@ -12,7 +12,7 @@
 }
 
 .app-footer .logo {
-     color: #fff;
+     color: var(--link-color);
      font-weight: 700;
      font-size: 1.5em;
 }
