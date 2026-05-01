@@ -119,6 +119,46 @@ const LandingPage = () => {
 
                     </div>
                 </section>
+                {/* HOW IT WORKS SECTION */}
+                <section id="how-it-works" className="section-transparent" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
+                    <div className="container">
+
+                        <h2 className="section-title">How It Works</h2>
+
+                        <p className="section-subtitle">
+                            Three simple steps to automate your microplastic analysis.
+                        </p>
+
+                        <div className="features-grid">
+
+                            <div className="feature-item">
+                                <div className="icon">1️⃣</div>
+                                <h3>Upload Sample</h3>
+                                <p>
+                                    Take a clear image of your filtered water sample under a microscope and upload it to the dashboard.
+                                </p>
+                            </div>
+
+                            <div className="feature-item">
+                                <div className="icon">2️⃣</div>
+                                <h3>AI Processing</h3>
+                                <p>
+                                    Our neural network scans the image, identifying, outlining, and sizing every microplastic particle.
+                                </p>
+                            </div>
+
+                            <div className="feature-item">
+                                <div className="icon">3️⃣</div>
+                                <h3>Get Insights</h3>
+                                <p>
+                                    Review the generated scientific report, morphological breakdown, and export your data as a CSV.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
 
             </main>
 
