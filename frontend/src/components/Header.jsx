@@ -1,34 +1,39 @@
 
 
 // export default Header;
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import './Header.css';
 
 const Header = ({ type = 'main' }) => {
-    const [isDarkMode, setIsDarkMode] = useState(false); // Default to your favorite Dark Mode
-
-    // Update the data-theme attribute on the <html> tag
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-    }, [isDarkMode]);
-
-    const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    const { theme, toggleTheme } = useTheme();
+    const isDarkMode = theme === 'dark';
+    const toggleThemeLabel = isDarkMode ? '☀️ Light' : '🌙 Dark';
 
     return (
         <header className="app-header">
             <div className="container">
                 <nav>
                     <Link to="/" className="logo">Marine Insight</Link>
-                    
+
                     {type === 'main' && (
-                         <ul>
-                            <li><Link to="/dashboard">Dashboard</Link></li>
-                            <li><Link to="/qa">Analysis</Link></li>
-                            <li><Link to="/report">Reports</Link></li>
-                            <li><Link to="/loginn">Logout</Link></li>
-                             <li><Link to="/edu">Educational awareness</Link></li>
-                        </ul>
+                        <>
+                            <ul>
+                                <li><Link to="/dashboard">Dashboard</Link></li>
+                                <li><Link to="/qa">Analysis</Link></li>
+                                <li><Link to="/edu">Educational awareness</Link></li>
+                                <li><Link to="/loginn">Logout</Link></li>
+                            </ul>
+                            <div className="header-actions">
+                                <button onClick={toggleTheme} className="theme-toggle-btn">
+                                    {toggleThemeLabel}
+                                </button>
+                                <Link to="/settings" className="settings-icon-link" aria-label="Settings">
+                                    <span className="settings-icon">⚙️</span>
+                                </Link>
+                            </div>
+                        </>
                     )}
 
                     {type === 'landing' && (
@@ -39,11 +44,6 @@ const Header = ({ type = 'main' }) => {
                             <li><Link to="/loginn" className="btn btn-primary">Login / Sign Up</Link></li>
                         </ul>
                     )}
-
-                    {/* Theme Toggle Button */}
-                    <button onClick={toggleTheme} className="theme-toggle-btn">
-                        {isDarkMode ? '🌙 Dark' : '☀️ Light'}
-                    </button>
                 </nav>
             </div>
         </header>

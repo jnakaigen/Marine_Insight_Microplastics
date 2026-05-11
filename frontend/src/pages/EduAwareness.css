@@ -281,12 +281,14 @@
     text-align: center;
     background: linear-gradient(to bottom, #fff, #00f5d4);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 50px;
 }
 
 .glass-hero {
     background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 30px;
@@ -325,6 +327,7 @@
     padding: 30px;
     transition: all 0.4s ease;
     animation: float 6s ease-in-out infinite;
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
 }
 
@@ -400,4 +403,69 @@
     font-style: italic;
     text-align: center;
     margin: 0;
+}
+
+[data-theme='light'] .marine-viewport {
+    background: linear-gradient(180deg, #f8fcff 0%, #e8f3ff 100%);
+    color: #102a43;
+}
+
+[data-theme='light'] .marine-viewport .ocean-overlay {
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.96) 0%, #d5e5fb 100%);
+}
+
+[data-theme='light'] .marine-viewport .bubble {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 12px rgba(16, 42, 67, 0.15);
+}
+
+[data-theme='light'] .marine-viewport .glass-hero,
+[data-theme='light'] .marine-viewport .type-glass-card,
+[data-theme='light'] .marine-viewport .content-image-wrapper {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(16, 42, 67, 0.12);
+    box-shadow: 0 16px 40px rgba(16, 42, 67, 0.08);
+    color: #102a43;
+}
+
+[data-theme='light'] .marine-viewport .main-glow-title {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: unset;
+    color: #0f3555;
+}
+
+[data-theme='light'] .marine-viewport .sub-glow-title {
+    color: #1f4d78;
+}
+
+[data-theme='light'] .marine-viewport .type-glass-card h3,
+[data-theme='light'] .marine-viewport .step-box h3,
+[data-theme='light'] .marine-viewport .image-caption,
+[data-theme='light'] .marine-viewport .glass-hero p,
+[data-theme='light'] .marine-viewport .common-types-container p,
+[data-theme='light'] .marine-viewport .content-image-wrapper p,
+[data-theme='light'] .marine-viewport .step-box p,
+[data-theme='light'] .marine-viewport .ai-lead-text,
+[data-theme='light'] .marine-viewport .ai-log,
+[data-theme='light'] .marine-viewport .ai-log strong {
+    color: #102a43;
+}
+
+[data-theme='light'] .marine-viewport .type-glass-card {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme='light'] .marine-viewport .card-id {
+    color: #2a6f97;
+    opacity: 0.9;
+}
+
+[data-theme='light'] .marine-viewport .sub-glow-title.gold {
+    color: #d98f15;
+}
+
+[data-theme='light'] .marine-viewport img {
+    filter: saturate(1.05) brightness(1.02);
 }

@@ -7,6 +7,7 @@ from myapp.views import (
     get_dashboard_data, 
     get_single_detection, 
     get_batch_results, 
+    delete_batch,
     get_locations_by_city,  # Directly imported
     get_spot_insight        # Directly imported
 )
@@ -18,6 +19,7 @@ urlpatterns = [
     path('dashboard/', get_dashboard_data, name='dashboard'),
     path('detection/<int:detection_id>/', get_single_detection, name='single_detection'),
     path('batch/<uuid:batch_id>/', get_batch_results, name='batch_results'),
+    path('delete/batch/<uuid:batch_id>/', delete_batch, name='delete_batch'),
     
     # Fixed these lines (removed "views.")
     path('locations/', get_locations_by_city, name='locations_by_city'),

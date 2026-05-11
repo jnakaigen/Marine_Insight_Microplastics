@@ -9,27 +9,23 @@
 
 .upload-section p {
     font-size: 1.1em;
-    color: #666;
     max-width: 600px;
     margin: 0 auto 30px auto;
 }
 
+/* REMOVED hardcoded border and background-color so React can handle it dynamically */
 .upload-box {
-    border: 2px dashed #ccc;
     border-radius: 10px;
     padding: 60px 30px;
-    background-color: #fff;
     max-width: 700px;
     margin: 30px auto;
 }
 
 .upload-box .icon {
     font-size: 3em;
-    color: #aaa;
 }
 
 .upload-box p {
-    color: #888;
     margin: 15px 0;
 }
 
@@ -39,7 +35,7 @@
     text-decoration: none;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     border: none;
     font-size: 1em;
 }
@@ -55,22 +51,23 @@
 }
 
 .btn-secondary {
-    background-color: #fff;
-    color: #555;
+    background-color: transparent;
+    color: inherit;
     border: 1px solid #ccc;
 }
 
 .btn-secondary:hover {
-    background-color: #f0f0f0;
+    opacity: 0.8;
 }
 
 /* How it works section */
 .info-section {
-    background-color: #fff;
+    background-color: var(--surface, #fff); 
+    color: var(--text-primary, #333); 
     padding: 50px;
     text-align: left;
     margin-top: 40px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color, #e0e0e0); 
     border-radius: 8px;
 }
 
@@ -109,8 +106,4 @@
 .info-columns li {
     margin-bottom: 10px;
     line-height: 1.6;
-}
-
-.info-columns strong {
-    color: #333;
 }

@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AuthPage.css';
+import waterVideo from '../assets/water-video.mp4';
 
 // --- Particle Imports ---
 import Particles from "react-tsparticles";
@@ -74,35 +75,45 @@ const LoginnPage = () => {
 
     return (
         <div className="auth-page" ref={container}>
+            <div className="auth-shell">
+                <div className="auth-video-wrapper">
+                    <video autoPlay loop muted playsInline className="auth-video">
+                        <source src={waterVideo} type="video/mp4" />
+                    </video>
+                    <div className="auth-video-overlay" />
+                </div>
+
+                <div className="auth-content">
+                    <div className="auth-container">
+                        <Link to="/" className="logo">Marine Insight</Link>
+                        <h1>Welcome Back</h1>
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="email">Email Address</label>
+                                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            </div>
+                            {error && <p className="auth-error" ref={errorRef}>{error}</p>}
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? 'Logging in...' : 'Login'}
+                            </button>
+                        </form>
+                        <div className="form-links">
+                            <Link to="/forgot-password">Forgot Password?</Link> | <Link to="/signnup">Sign Up</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <Particles
                 id="tsparticles"
                 init={particlesInit}
                 options={particlesConfig}
                 style={{ position: 'absolute', zIndex: 0, top: 0, left: 0, width: '100%', height: '100%' }}
             />
-
-            <div className="auth-container" style={{ zIndex: 1 }}>
-
-                <Link to="/" className="logo">Marine Insight</Link>
-                <h1>Welcome Back</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    </div>
-                     {error && <p style={{ color: 'red' }} ref={errorRef}>{error}</p>}
-                    <button type="submit" className="btn btn-primary" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
-                    </button>
-                </form>
-                <div className="form-links">
-                    <Link to="/forgot-password">Forgot Password?</Link> | <Link to="/signnup">Sign Up</Link>
-                </div>
-            </div>
         </div>
     );
 };
