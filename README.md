@@ -1,7 +1,7 @@
-# MarinePhase2 Project
+# MarineInsight
 
 ## Project Overview
-MarinePhase2 is a sophisticated multi-service platform integrating **Computer Vision**, **Large Language Models (LLMs)**, and **Web Frameworks** to provide marine-related data processing and analysis. 
+MarineInsight is a sophisticated multi-service platform integrating **Computer Vision**, **Large Language Models (LLMs)**, and **Web Frameworks** to provide marine-related data processing and analysis. 
 
 The project utilizes a dual-backend architecture:
 1.  **Django Backend:** Handles core business logic, user authentication (JWT), and relational data management.
