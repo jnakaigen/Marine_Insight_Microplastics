@@ -1,20 +1,4 @@
-# # --- Secrets (NEVER UPLOAD THESE) ---
-# .env
-# backend/.env
-# frontend/.env
 
-# # --- Python ---
-# __pycache__/
-# *.py[cod]
-# venv/
-# .pytest_cache/
-
-# # --- Node.js (React) ---
-# node_modules/
-# dist/
-# build/
-# .DS_Store
-# thumbs.db
 # ==========================================
 # 🛑 SECRETS (NEVER UPLOAD)
 # ==========================================
@@ -65,4 +49,9 @@ uploads/
 *.jpg
 *.jpeg
 *.png
-!frontend/src/assets/**
+
+# Ignore ALL files inside the React assets folder
+frontend/src/assets/*
+
+# Un-ignore ONLY the water video
+!frontend/src/assets/water-video.mp4
