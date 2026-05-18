@@ -25,7 +25,7 @@ const SignupPage = () => {
 
         try {
             // 3. Send a POST request to the backend
-            const response = await axios.post('http://127.0.0.1:8000/api/register', {
+            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/register', {
                 fullName: fullName,
                 email: email,
                 password: password,

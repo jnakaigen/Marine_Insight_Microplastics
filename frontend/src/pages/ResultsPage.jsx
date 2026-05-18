@@ -229,7 +229,7 @@ const ResultsPage = () => {
         const token = localStorage.getItem('token') || localStorage.getItem('access');
         if (!data && batchId !== 'Unknown') {
             setLoading(true);
-            axios.get(`http://127.0.0.1:8000/api/batch/${batchId}/`, {
+            axios.get(`https://marine-insight-microplastics.onrender.com/api/batch/${batchId}/`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => setData(res.data))

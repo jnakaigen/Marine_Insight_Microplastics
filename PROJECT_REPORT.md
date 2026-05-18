@@ -160,14 +160,14 @@ The app uses `SummaryStatsProvider` context for shared analytics state.
 - sampling location entry
 - timestamp input
 - upload of multiple images as multipart form data
-- POST to `http://127.0.0.1:8000/api/detect/`
+- POST to `https://marine-insight-microplastics.onrender.com/api/detect/`
 - navigation to `/results` after analysis
 
 ### 5.3 Dashboard
 
 `frontend/src/pages/DashboardPage.jsx` implements:
 
-- fetch from `http://127.0.0.1:8000/api/dashboard/`
+- fetch from `https://marine-insight-microplastics.onrender.com/api/dashboard/`
 - search by location
 - cards for batch results with thumbnail previews
 - buttons to view batch results and scientific reports
@@ -177,7 +177,7 @@ The app uses `SummaryStatsProvider` context for shared analytics state.
 
 `frontend/src/pages/ResultsPage.jsx` supports:
 
-- retrieval of batch details from `http://127.0.0.1:8000/api/batch/<id>/`
+- retrieval of batch details from `https://marine-insight-microplastics.onrender.com/api/batch/<id>/`
 - summary metrics for particle counts and area
 - image gallery of annotated outputs
 - scientific report display

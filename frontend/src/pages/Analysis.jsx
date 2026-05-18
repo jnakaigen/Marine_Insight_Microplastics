@@ -21,7 +21,7 @@
 //     formData.append('file', file);
 
 //     try {
-//       const response = await axios.post('http://127.0.0.1:8000/detect', formData);
+//       const response = await axios.post('https://marine-insight-microplastics.onrender.com/detect', formData);
 //       setData(response.data);
 //     } catch (error) {
 //       console.error("Connection Error:", error);

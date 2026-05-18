@@ -31,7 +31,7 @@ const Analysiss = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://127.0.0.1:8000/api/detect/', formData, {
+            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/detect/', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

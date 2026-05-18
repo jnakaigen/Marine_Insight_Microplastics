@@ -25,7 +25,7 @@ const SignnupPage = () => {
         try {
             // 1. Updated URL to match your Django path: /api/signup/
             // 2. Django's User model requires 'username'. We will use the email as the username.
-            const response = await axios.post('http://127.0.0.1:8000/api/signup/', {
+            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/signup/', {
                 username: email, // Sending email as username
                 email: email,
                 password: password,

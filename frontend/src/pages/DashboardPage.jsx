@@ -14,7 +14,7 @@ const DashboardPage = () => {
     useEffect(() => {
             const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
 
-            fetch('http://127.0.0.1:8000/api/dashboard/', {
+            fetch('https://marine-insight-microplastics.onrender.com/api/dashboard/', {
                 headers: {
                     'Authorization': `Bearer ${token}`, // Pass Token
                     'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ const DashboardPage = () => {
             const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
 
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/delete/batch/${batchId}/`, {
+                const response = await fetch(`https://marine-insight-microplastics.onrender.com/api/delete/batch/${batchId}/`, {
                     method: 'DELETE',
                     headers: { 
                         'Accept': 'application/json',

@@ -56,7 +56,7 @@ const LoginnPage = () => {
         try {
             // 1. Updated URL to match Django /api/signin/
             // 2. We send 'username' key because Django's SimpleJWT expects 'username'
-            const response = await axios.post('http://127.0.0.1:8000/api/login/', {
+            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/login/', {
                 username: email, // Using email as the username
                 password: password,
             });
