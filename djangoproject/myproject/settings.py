@@ -7,7 +7,9 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@l)gh!7e65kdafjak&q9e**wlvi239=kn-wq#2l*=izl*1k67^')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['marine-insight-microplastics.onrender.com'] # Allows your Render domain
+
+# CHANGED: Wildcard allows Render to accept traffic without instantly rejecting it
+ALLOWED_HOSTS = ['*'] 
 
 # --- 2. AI & API KEYS (Pulling from Render Env) ---
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
@@ -44,7 +46,7 @@ TEMPLATES = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # ADDED for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,15 +77,14 @@ SIMPLE_JWT = {
 }
 
 # --- 6. CORS & SECURITY ---
-CORS_ALLOW_ALL_ORIGINS = False # Simplified for testing; update to Vercel URL later
+# CHANGED: Set to True to guarantee Vercel gets through today. 
+CORS_ALLOW_ALL_ORIGINS = True 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://marine-insight-microplastics.vercel.app", # Replace with your real Vercel URL
-    "http://localhost:5173", # Keep this so you can still test on your laptop!
-]
-# CSRF Trusted Origins for Render
+
+# CSRF Trusted Origins for Render & Vercel
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
+    "https://*.vercel.app",
     "http://localhost:5173",
 ]
 
@@ -95,5 +96,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'myproject.urls'
 WSGI_APPLICATION = 'myproject.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# (Keep TEMPLATES and AUTH_PASSWORD_VALIDATORS as they are)
