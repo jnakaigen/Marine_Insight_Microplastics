@@ -84,31 +84,26 @@ os.environ["TF_USE_LEGACY_KERAS"] = "1"
 # ==========================================
 # 4. RAG / VECTOR DATABASE SETUP
 # ==========================================
-current_dir = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(current_dir, "marine_brain_new") 
-
-print(f"📂 DJANGO IS LOOKING FOR DATABASE AT: {DB_PATH}")
-if not os.path.exists(DB_PATH):
-    print("🚨 ERROR: FOLDER NOT FOUND! Ensure you unzipped marine_brain_new.zip here.")
-
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-persistent_client = chromadb.PersistentClient(path=DB_PATH)
-
-vector_db = Chroma(
-    client=persistent_client,
-    collection_name="langchain",
-    embedding_function=embeddings,
-)
-
-try:
-    doc_count = vector_db._collection.count()
-    if doc_count == 0:
-        print("🚨 STILL 0: Try deleting the 'marine_brain_new' folder and re-unzipping it.")
-    else:
-        print(f"✅ SUCCESS: Found {doc_count} research chunks!")
-except Exception as e:
-    print(f"❌ CONNECTION ERROR: {e}")
+def get_vector_db():
+    """
+    Lazy loads Chroma vector database only when actively running an analysis pipeline.
+    Prevents global scope exceptions from crashing unrelated views like signup and login.
+    """
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    DB_PATH = os.path.join(current_dir, "marine_brain_new")
+    
+    if not os.path.exists(DB_PATH):
+        # Create a fallback empty directory structure on Render so it doesn't throw a hard crash
+        os.makedirs(DB_PATH, exist_ok=True)
+        
+    persistent_client = chromadb.PersistentClient(path=DB_PATH)
+    return Chroma(
+        client=persistent_client,
+        collection_name="langchain",
+        embedding_function=embeddings,
+    )
 
 # ==========================================
 # 5. MORE MODEL LOADING
@@ -197,8 +192,10 @@ def detect_marine_waste(request):
         # --- Phase 2: Hazard Analytics Phase ---
         hazard_metrics = calculate_physical_hazard(found_items)
         
-        # --- Phase 3: Scientific Reporting Phase (RAG) ---
+       # --- Phase 3: Scientific Reporting Phase (RAG) ---
         try:
+            # Safely invoke the lazy load constructor when processing batches
+            v_db = get_vector_db() 
             scientific_report_text = generate_scientific_report(hazard_metrics, str(batch_id))
         except Exception as e:
             scientific_report_text = f"Report error: {str(e)}"
