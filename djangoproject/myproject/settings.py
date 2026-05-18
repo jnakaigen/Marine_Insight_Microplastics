@@ -7,7 +7,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@l)gh!7e65kdafjak&q9e**wlvi239=kn-wq#2l*=izl*1k67^')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['*'] # Allows your Render domain
+ALLOWED_HOSTS = ['marine-insight-microplastics.onrender.com'] # Allows your Render domain
 
 # --- 2. AI & API KEYS (Pulling from Render Env) ---
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
@@ -75,9 +75,12 @@ SIMPLE_JWT = {
 }
 
 # --- 6. CORS & SECURITY ---
-CORS_ALLOW_ALL_ORIGINS = True # Simplified for testing; update to Vercel URL later
+CORS_ALLOW_ALL_ORIGINS = False # Simplified for testing; update to Vercel URL later
 CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOWED_ORIGINS = [
+    "https://marine-insight-microplastics.vercel.app", # Replace with your real Vercel URL
+    "http://localhost:5173", # Keep this so you can still test on your laptop!
+]
 # CSRF Trusted Origins for Render
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
