@@ -74,7 +74,8 @@ def pixel_area_to_mm(area_pixels):
 # 3. GLOBAL MODEL LOADING
 # ==========================================
 BASE_DIR_PATH = str(settings.BASE_DIR)
-model1 = YOLO('best_weathering.pt') 
+weathering_path = os.path.join(BASE_DIR_PATH, 'best_weathering.pt')
+model1 = YOLO(weathering_path)
 
 age_model_path = os.path.join(BASE_DIR_PATH, "age_classifier_v2.h5")
 age_model = load_model(age_model_path)
@@ -118,7 +119,8 @@ risk_model_path = os.path.join(BASE_DIR, "risk_model.pkl")
 risk_model = joblib.load(risk_model_path)
 
 matplotlib.use('Agg')
-model = YOLO('best.pt')
+best_path = os.path.join(BASE_DIR_PATH, 'best.pt')
+model = YOLO(best_path)
 
 # ==========================================
 # 6. MAIN DETECTION API ENDPOINT
