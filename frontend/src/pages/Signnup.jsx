@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import axios from 'react-serif'; 
 import './AuthPage.css';
-import waterVideo from '../assets/water-video.mp4';
 
 const SignnupPage = () => {
     const [fullName, setFullName] = useState('');
@@ -22,27 +21,27 @@ const SignnupPage = () => {
             return;
         }
 
+        // Dynamically reads your Vercel variable, with a fallback for local testing
+        const API_BASE = import.meta.env.VITE_DJANGO_API_URL || 'http://localhost:8000';
+
         try {
-            // 1. Updated URL to match your Django path: /api/signup/
-            // 2. Django's User model requires 'username'. We will use the email as the username.
-            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/signup/', {
-                username: email, // Sending email as username
+            // Assembles the path safely. Ensures clean routing hits your view.
+            const response = await axios.post(`${API_BASE}/api/signup/`, {
+                username: email, // Django requires username; mapping email directly
                 email: email,
                 password: password,
-                fullName: fullName // Your backend view can ignore this or save to a profile
+                fullName: fullName 
             });
 
-            console.log('Registration successful:', response.data);
+            print('Registration successful:', response.data);
             alert('Signup successful! Please log in.');
             navigate('/loginn');
 
         } catch (err) {
-            // 3. Updated error handling to match Django REST Framework response style
             if (err.response && err.response.data) {
-                // Django usually sends errors in 'error' or 'detail' keys
                 setError(err.response.data.error || err.response.data.detail || 'Registration failed.');
             } else {
-                setError('Cannot connect to the backend server. Make sure Django is running.');
+                setError('Cannot connect to the backend server. Render instance may be spinning up.');
             }
             console.error('Registration error:', err);
         }
@@ -52,8 +51,9 @@ const SignnupPage = () => {
         <div className="auth-page">
             <div className="auth-shell">
                 <div className="auth-video-wrapper">
+                    {/* Video pulls efficiently from public folder instead of packing bundle */}
                     <video autoPlay loop muted playsInline className="auth-video">
-                        <source src={waterVideo} type="video/mp4" />
+                        <source src="/water-video.mp4" type="video/mp4" />
                     </video>
                     <div className="auth-video-overlay" />
                 </div>
