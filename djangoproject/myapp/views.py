@@ -39,6 +39,9 @@ from myapp.serializers import MarineWasteDetectionSerializer
 from .models import MarineWasteDetection 
 from .Newbrain import generate_scientific_report 
 
+# Set matplotlib backend safely before any graphics processing happens globally
+matplotlib.use('Agg')
+
 # ==========================================
 # 2. GLOBAL CONSTANTS & HELPER FUNCTIONS
 # ==========================================
@@ -71,20 +74,51 @@ def pixel_area_to_mm(area_pixels):
     return (area_pixels ** 0.5) * PIXEL_TO_MM
 
 # ==========================================
-# 3. GLOBAL MODEL LOADING
+# 3 & 5. MODEL CACHING LIFECYCLES (PRODUCTION SAFE)
 # ==========================================
-BASE_DIR_PATH = str(settings.BASE_DIR)
-weathering_path = os.path.join(BASE_DIR_PATH, 'best_weathering.pt')
-model1 = YOLO(weathering_path)
+_models_cache = {}
 
-age_model_path = os.path.join(BASE_DIR_PATH, "age_classifier_v2.h5")
-age_model = load_model(age_model_path)
-os.environ["TF_USE_LEGACY_KERAS"] = "1" 
+def get_model(model_name):
+    """
+    Dynamically caches models in memory upon active execution request.
+    Prevents heavy initializations from exceeding free tier RAM limits at startup.
+    """
+    global _models_cache
+    BASE_DIR_PATH = str(settings.BASE_DIR)
+    
+    if model_name in _models_cache:
+        return _models_cache[model_name]
+        
+    if model_name == "weathering":
+        path = os.path.join(BASE_DIR_PATH, 'best_weathering.pt')
+        _models_cache[model_name] = YOLO(path)
+        
+    elif model_name == "age":
+        os.environ["TF_USE_LEGACY_KERAS"] = "1" 
+        path = os.path.join(BASE_DIR_PATH, "age_classifier_v2.h5")
+        _models_cache[model_name] = load_model(path)
+        
+    elif model_name == "risk":
+        path = os.path.join(BASE_DIR_PATH, "risk_model.pkl")
+        _models_cache[model_name] = joblib.load(path)
+        
+    elif model_name == "primary_yolo":
+        path = os.path.join(BASE_DIR_PATH, 'best.pt')
+        _models_cache[model_name] = YOLO(path)
+        
+    return _models_cache[model_name]
 
 # ==========================================
 # 4. RAG / VECTOR DATABASE SETUP
 # ==========================================
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+_embeddings_instance = None
+
+def get_embeddings():
+    """Lazy loads embeddings only when an active request demands them."""
+    global _embeddings_instance
+    if _embeddings_instance is None:
+        _embeddings_instance = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return _embeddings_instance
 
 def get_vector_db():
     """
@@ -95,27 +129,15 @@ def get_vector_db():
     DB_PATH = os.path.join(current_dir, "marine_brain_new")
     
     if not os.path.exists(DB_PATH):
-        # Create a fallback empty directory structure on Render so it doesn't throw a hard crash
         os.makedirs(DB_PATH, exist_ok=True)
+        print("📁 Render Target: Setup dynamic fallback architecture tracking folder.")
         
     persistent_client = chromadb.PersistentClient(path=DB_PATH)
     return Chroma(
         client=persistent_client,
         collection_name="langchain",
-        embedding_function=embeddings,
+        embedding_function=get_embeddings(),
     )
-
-# ==========================================
-# 5. MORE MODEL LOADING
-# ==========================================
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-risk_model_path = os.path.join(BASE_DIR, "risk_model.pkl")
-risk_model = joblib.load(risk_model_path)
-
-matplotlib.use('Agg')
-best_path = os.path.join(BASE_DIR_PATH, 'best.pt')
-model = YOLO(best_path)
 
 # ==========================================
 # 6. MAIN DETECTION API ENDPOINT
@@ -123,7 +145,7 @@ model = YOLO(best_path)
 @csrf_exempt 
 @api_view(['POST']) 
 @parser_classes([MultiPartParser, FormParser]) 
-@permission_classes([IsAuthenticated]) # SECURED
+@permission_classes([IsAuthenticated]) 
 def detect_marine_waste(request):
     files = request.FILES.getlist('files')
     if not files:
@@ -145,12 +167,18 @@ def detect_marine_waste(request):
     all_image_results = []
     batch_id = uuid.uuid4() 
 
+    # Fetch models from the runtime cache stack
+    primary_yolo_model = get_model("primary_yolo")
+    weathering_model = get_model("weathering")
+    age_model = get_model("age")
+    risk_model = get_model("risk")
+
     for file in files:
         image_data = file.read()
         image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
         # --- Phase 1: Detection (YOLO) ---
-        results = model.predict(source=np.array(image))
+        results = primary_yolo_model.predict(source=np.array(image))
         found_items = []
         annotated_base64 = ""
 
@@ -168,12 +196,12 @@ def detect_marine_waste(request):
                 for box in r.boxes:
                     coords = box.xyxy[0].cpu().tolist() 
                     area = (coords[2] - coords[0]) * (coords[3] - coords[1]) 
-                    label = model.names[int(box.cls[0])] 
+                    label = primary_yolo_model.names[int(box.cls[0])] 
                     items_to_process.append((label, area))
             elif r.masks:
                 for i, mask in enumerate(r.masks.data):
                     area = float(mask.sum().item()) 
-                    label = model.names[int(r.boxes.cls[i])]
+                    label = primary_yolo_model.names[int(r.boxes.cls[i])]
                     items_to_process.append((label, area))
 
             for label, area in items_to_process:
@@ -192,9 +220,8 @@ def detect_marine_waste(request):
         # --- Phase 2: Hazard Analytics Phase ---
         hazard_metrics = calculate_physical_hazard(found_items)
         
-       # --- Phase 3: Scientific Reporting Phase (RAG) ---
+        # --- Phase 3: Scientific Reporting Phase (RAG) ---
         try:
-            # Safely invoke the lazy load constructor when processing batches
             v_db = get_vector_db() 
             scientific_report_text = generate_scientific_report(hazard_metrics, str(batch_id))
         except Exception as e:
@@ -223,7 +250,7 @@ def detect_marine_waste(request):
 
         # --- Phase 6: Database Persistence ---
         db_entry = MarineWasteDetection.objects.create(
-            user=request.user, # Tied strictly to the logged-in user
+            user=request.user, 
             batch_id=batch_id,
             filename=file.name,
             total_detections=len(found_items),
@@ -306,7 +333,7 @@ def custom_login(request):
 # 8. DATA FETCHING ENDPOINTS (FOR FRONTEND)
 # ==========================================
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) # SECURED
+@permission_classes([IsAuthenticated]) 
 def get_dashboard_data(request):
     batch_ids = MarineWasteDetection.objects.filter(user=request.user).values_list('batch_id', flat=True).distinct()
     dashboard = []
@@ -348,7 +375,7 @@ def get_dashboard_data(request):
     return Response(dashboard)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) # SECURED
+@permission_classes([IsAuthenticated]) 
 def get_single_detection(request, detection_id):
     try:
         detection = MarineWasteDetection.objects.get(id=detection_id, user=request.user)
@@ -358,7 +385,7 @@ def get_single_detection(request, detection_id):
         return Response({"error": "Detection not found or unauthorized"}, status=404)
     
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) # SECURED
+@permission_classes([IsAuthenticated]) 
 def get_batch_results(request, batch_id):
     detections = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user)
     
@@ -386,7 +413,7 @@ def get_batch_results(request, batch_id):
     })
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated]) # SECURED
+@permission_classes([IsAuthenticated]) 
 def delete_batch(request, batch_id):
     deleted_count, _ = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user).delete()
     if deleted_count == 0:
@@ -498,10 +525,6 @@ def calculate_physical_hazard(found_items):
 def search_insight(request):
     query = request.GET.get('q') 
     results = []
-    
-    if query:
-        pass 
-        
     return render(request, 'insight_results.html', {'results': results, 'query': query})
 
 @api_view(['GET'])
