@@ -1,76 +1,115 @@
-# MarineInsight
 
-## Project Overview
-MarineInsight is a sophisticated multi-service platform integrating **Computer Vision**, **Large Language Models (LLMs)**, and **Web Frameworks** to provide marine-related data processing and analysis. 
+🌊 MarineInsight: A Unified Deep Learning & RAG Framework for Marine Microplastic Analysis and Hazard Assessment 
 
-The project utilizes a dual-backend architecture:
-1.  **Django Backend:** Handles core business logic, user authentication (JWT), and relational data management.
-2.  **FastAPI Backend:** Manages high-performance asynchronous tasks, NoSQL data (MongoDB), and specialized API endpoints.
-3.  **AI/ML Engine:** Leverages `ultralytics` (YOLO) for object detection, `tensorflow`/`torch` for deep learning, and `LangChain` for RAG (Retrieval-Augmented Generation) capabilities using `ChromaDB`.
+> An end-to-end full-stack platform automating the detection, quantification, and environmental risk assessment of marine microplastics using computer vision and Generative AI.
+> 
+> 
 
-## System Architecture & Flowchart
+## 📌 Overview
 
-```mermaid
-graph TD
-    subgraph Client_Layer
-        User[User Browser/App]
-    end
+Current methods for monitoring microplastic pollution rely heavily on manual microscopy, which is labor-intensive, error-prone, and struggles to scale for real-time environmental monitoring. **MarineInsight** bridges this gap by combining high-speed instance segmentation with a Retrieval-Augmented Generation (RAG) framework.
 
-    subgraph API_Gateway_Logic
-        Django[Django Server :8000]
-        FastAPI[FastAPI Server :8001]
-    end
+The system not only detects and measures microplastics from microscopic water sample images but also calculates their multidimensional physical risk and synthesizes the data into human-readable, evidence-backed ecological reports.
 
-    subgraph AI_Processing_Module
-        YOLO[Ultralytics/YOLO - Object Detection]
-        LangChain[LangChain + HuggingFace - RAG Pipeline]
-        VectorDB[(ChromaDB - Vector Store)]
-    end
+## ✨ Key Features
 
-    subgraph Data_Layer
-        PostgreSQL[(Relational DB)]
-        MongoDB[(MongoDB - Motor/Async)]
-    end
+* **Real-Time Instance Segmentation:** Powered by **YOLOv8-Seg** to instantly detect, segment, and classify microplastics into four primary morphologies: Fiber, Film, Fragment, and Pellet.
 
-    User -->|Auth/Admin| Django
-    User -->|Async Data/Fast API| FastAPI
-    
-    Django --> PostgreSQL
-    FastAPI --> MongoDB
-    
-    Django & FastAPI --> AI_Processing_Module
-    AI_Processing_Module --> VectorDB
-    AI_Processing_Module -->|Inference| YOLO
+
+* **Multidimensional Hazard Assessment:** Calculates a particle-specific hazard score (Hp = Size Rank + Shape Rank) to evaluate the physical risk posed by the contaminants.
+
+
+* **RAG-Powered Ecotoxicologist:** Translates raw quantitative metrics into comprehensive environmental impact reports by retrieving contextual knowledge from validated scientific literature.
+
+
+* **Full-Stack Analytics Dashboard:** Features a React.js frontend for an interactive user experience and a robust Django backend for secure HTTP handling and deep learning model integration. Includes seamless PDF and CSV data exports.
+
+
+
+## 🛠️ Tech Stack
+
+* **Machine Learning & AI:** Python, YOLOv8-Seg, Transfer Learning 
+
+
+* **Generative AI:** Retrieval-Augmented Generation (RAG), Dense Vector Indexing, LLMs 
+
+
+* **Backend:** Django (Python), REST APIs 
+
+
+* **Frontend:** React.js 
+
+
+* **Data & Annotation:** Roboflow 
+
+
+
+## 🏗️ System Architecture
+
+1. **Data Ingestion & QA:** Users upload microscopic images after clearing a strict sample preparation and imaging standard checklist.
+
+
+2. **AI Processing:** YOLOv8-Seg extracts precise segmentation masks, outputting particle counts, size (area in pixels/mm²), and morphological class.
+
+
+3. **Hazard Calculation:** The backend ranks each particle based on its physical dimensions to isolate the maximum particle-specific hazard.
+
+
+4. **Knowledge Retrieval:** The RAG pipeline queries a vector database of scientific literature based on the specific sample findings.
+
+
+5. **Synthesis & Export:** The platform generates a grounded environmental report and visual dashboard for the researcher.
+
+
+
+## 🚀 Installation & Local Setup
+
+### Prerequisites
+
+* Python 3.9+
+* Node.js & npm
+* Git
+
+### Backend (Django + ML Models)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/YourUsername/MarineInsight.git
+cd MarineInsight/backend
+
+# 2. Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run database migrations
+python manage.py migrate
+
+# 5. Start the backend server
+python manage.py runserver
+
 ```
 
-## Key Features
-- **Object Detection:** Real-time marine species or vessel detection using `ultralytics`.
-- **Intelligent Chat:** AI-driven insights using `LangChain` and `sentence-transformers`.
-- **Hybrid Backend:** Combines the robustness of Django with the speed of FastAPI.
-- **Vector Search:** Document indexing and retrieval using `ChromaDB` and `pypdf`.
-- **Secure Auth:** JWT-based authentication across both backend services.
+### Frontend (React)
 
-## Tech Stack
+```bash
+# 1. Navigate to the frontend directory
+cd ../frontend
 
-### Backends
-- **Django 6.0:** Main application framework.
-- **FastAPI:** High-performance async API service.
-- **Uvicorn:** ASGI server implementation.
+# 2. Install dependencies
+npm install
 
-### Artificial Intelligence
-- **Computer Vision:** `ultralytics` (YOLOv8+), `opencv-python`.
-- **Deep Learning:** `tensorflow`, `torch`, `keras`.
-- **NLP/LLM:** `langchain`, `transformers`, `huggingface-hub`.
-- **Vector Database:** `chromadb`.
+# 3. Start the development server
+npm start
 
-### Data & Utilities
-- **Databases:** MongoDB (via `motor`), Relational DBs (via `SQLAlchemy`/Django ORM).
-- **Processing:** `numpy`, `pandas` (polars), `scikit-learn`.
+```
 
-## Installation
-1. Install dependencies for the main project:
-   `pip install -r djangoproject/requirements.txt`
-2. Install dependencies for the backend service:
-   `pip install -r backend/requirements.txt`
-3. Configure environment variables in `.env`.
-4. Run servers using `python manage.py runserver` and `uvicorn main:app`.
+## 🔗 Project Links
+
+* **Roboflow Dataset:** [https://app.roboflow.com/project-aunby/microplastic-final-kpdl3/2]
+* **Colab Training Notebooks:**
+      🟢 [YOLOv8-Seg Training Notebook](https://colab.research.google.com/drive/1y6JAWzAqOOwEp_3ae1d4upe_IZp1H9j5)
+      🔵 [U-Net2+ Training Notebook](https://colab.research.google.com/drive/1kzI24BQzk_fHkDIYn02w-_re_WaQ1y5Z)
+      🟣 [U-Net Training Notebook](https://colab.research.google.com/drive/1FPozBVioMZxU2MOivYiuB3oS0VtgZw0k)
