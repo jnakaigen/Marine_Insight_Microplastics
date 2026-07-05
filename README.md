@@ -16,9 +16,7 @@ The system detects and measures microplastics from microscopic water sample imag
 
 <img width="1869" height="921" alt="Analysis results page" src="https://github.com/user-attachments/assets/b8f3d7bf-0b65-4fdb-8f16-60a142d323b1" />
 
-<img width="1875" height="938" alt="Report generation screen" src="https://github.com/user-attachments/assets/7405f369-2a7d-41a1-9ffc-dba1dc802d9a" />
 
-<img width="1879" height="957" alt="Environmental analysis display" src="https://github.com/user-attachments/assets/e85fd5c3-035d-41af-8037-de9859e3dc12" />
 
 <img width="1832" height="832" alt="Detection results view" src="https://github.com/user-attachments/assets/9b318686-d088-464d-b802-70b9e3dc12d2" />
 
