@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react';
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
+import { API } from '../api';
 import './DashboardPage.css';
 
 const DashboardPage = () => {
@@ -14,9 +15,9 @@ const DashboardPage = () => {
     useEffect(() => {
             const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
 
-            fetch('https://marine-insight-microplastics.onrender.com/api/dashboard/', {
+            fetch(API('/dashboard/'), {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Pass Token
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             })
@@ -61,11 +62,11 @@ const DashboardPage = () => {
             const token = localStorage.getItem('token') || localStorage.getItem('access'); // Get Token
 
             try {
-                const response = await fetch(`https://marine-insight-microplastics.onrender.com/api/delete/batch/${batchId}/`, {
+                const response = await fetch(API(`/delete/batch/${batchId}/`), {
                     method: 'DELETE',
                     headers: { 
                         'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}` // Pass Token
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 

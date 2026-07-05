@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API } from '../api';
 import './AuthPage.css';
 import waterVideo from '../assets/water-video.mp4';
 
@@ -56,8 +57,8 @@ const LoginnPage = () => {
         try {
             // 1. Updated URL to match Django /api/signin/
             // 2. We send 'username' key because Django's SimpleJWT expects 'username'
-            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/login/', {
-                username: email, // Using email as the username
+            const response = await axios.post(API('/login/'), {
+                username: email,
                 password: password,
             });
 

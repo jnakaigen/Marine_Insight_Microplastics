@@ -33,14 +33,11 @@ from PIL import Image
 from ultralytics import YOLO 
 from tensorflow.keras.models import load_model 
 from langchain_huggingface import HuggingFaceEmbeddings 
-from langchain_chroma import Chroma 
+from langchain_chroma import Chroma
 
 from myapp.serializers import MarineWasteDetectionSerializer 
 from .models import MarineWasteDetection 
 from .Newbrain import generate_scientific_report 
-
-# Set matplotlib backend safely before any graphics processing happens globally
-matplotlib.use('Agg')
 
 # ==========================================
 # 2. GLOBAL CONSTANTS & HELPER FUNCTIONS
@@ -74,70 +71,58 @@ def pixel_area_to_mm(area_pixels):
     return (area_pixels ** 0.5) * PIXEL_TO_MM
 
 # ==========================================
-# 3 & 5. MODEL CACHING LIFECYCLES (PRODUCTION SAFE)
+# 3. LAZY MODEL + RAG LOADING
 # ==========================================
-_models_cache = {}
+model1 = None
+age_model = None
+model = None
+risk_model = None
+vector_db = None
 
-def get_model(model_name):
-    """
-    Dynamically caches models in memory upon active execution request.
-    Prevents heavy initializations from exceeding free tier RAM limits at startup.
-    """
-    global _models_cache
-    BASE_DIR_PATH = str(settings.BASE_DIR)
-    
-    if model_name in _models_cache:
-        return _models_cache[model_name]
-        
-    if model_name == "weathering":
-        path = os.path.join(BASE_DIR_PATH, 'best_weathering.pt')
-        _models_cache[model_name] = YOLO(path)
-        
-    elif model_name == "age":
-        os.environ["TF_USE_LEGACY_KERAS"] = "1" 
-        path = os.path.join(BASE_DIR_PATH, "age_classifier_v2.h5")
-        _models_cache[model_name] = load_model(path)
-        
-    elif model_name == "risk":
-        path = os.path.join(BASE_DIR_PATH, "risk_model.pkl")
-        _models_cache[model_name] = joblib.load(path)
-        
-    elif model_name == "primary_yolo":
-        path = os.path.join(BASE_DIR_PATH, 'best.pt')
-        _models_cache[model_name] = YOLO(path)
-        
-    return _models_cache[model_name]
 
-# ==========================================
-# 4. RAG / VECTOR DATABASE SETUP
-# ==========================================
-_embeddings_instance = None
+def get_lazy_models():
+    global model1, age_model, model, risk_model
+    if model1 is not None and age_model is not None and model is not None and risk_model is not None:
+        return
 
-def get_embeddings():
-    """Lazy loads embeddings only when an active request demands them."""
-    global _embeddings_instance
-    if _embeddings_instance is None:
-        _embeddings_instance = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return _embeddings_instance
+    os.environ["TF_USE_LEGACY_KERAS"] = "1"
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    base_dir_path = str(settings.BASE_DIR)
+
+    yolo1_path = os.path.join(base_dir, "best_weathering.pt")
+    yolo2_path = os.path.join(base_dir, "best.pt")
+    age_model_path = os.path.join(base_dir_path, "age_classifier_v2.h5")
+    risk_model_path = os.path.join(base_dir, "risk_model.pkl")
+
+    missing = [p for p in [yolo1_path, yolo2_path, age_model_path, risk_model_path] if not os.path.exists(p)]
+    if missing:
+        raise FileNotFoundError(f"Missing model files: {', '.join(missing)}")
+
+    model1 = YOLO(yolo1_path)
+    age_model = load_model(age_model_path)
+    risk_model = joblib.load(risk_model_path)
+    matplotlib.use('Agg')
+    model = YOLO(yolo2_path)
+
 
 def get_vector_db():
-    """
-    Lazy loads Chroma vector database only when actively running an analysis pipeline.
-    Prevents global scope exceptions from crashing unrelated views like signup and login.
-    """
+    global vector_db
+    if vector_db is not None:
+        return vector_db
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    DB_PATH = os.path.join(current_dir, "marine_brain_new")
-    
-    if not os.path.exists(DB_PATH):
-        os.makedirs(DB_PATH, exist_ok=True)
-        print("📁 Render Target: Setup dynamic fallback architecture tracking folder.")
-        
-    persistent_client = chromadb.PersistentClient(path=DB_PATH)
-    return Chroma(
-        client=persistent_client,
+    db_path = os.path.join(current_dir, "marine_brain_new")
+    if not os.path.exists(db_path):
+        raise FileNotFoundError(f"Chroma database folder not found: {db_path}")
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_db = Chroma(
+        persist_directory=db_path,
         collection_name="langchain",
-        embedding_function=get_embeddings(),
+        embedding_function=embeddings,
     )
+    return vector_db
+
 
 # ==========================================
 # 6. MAIN DETECTION API ENDPOINT
@@ -145,7 +130,7 @@ def get_vector_db():
 @csrf_exempt 
 @api_view(['POST']) 
 @parser_classes([MultiPartParser, FormParser]) 
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def detect_marine_waste(request):
     files = request.FILES.getlist('files')
     if not files:
@@ -165,20 +150,17 @@ def detect_marine_waste(request):
             analysis_time = timezone.now()
 
     all_image_results = []
-    batch_id = uuid.uuid4() 
+    batch_id = uuid.uuid4()
 
-    # Fetch models from the runtime cache stack
-    primary_yolo_model = get_model("primary_yolo")
-    weathering_model = get_model("weathering")
-    age_model = get_model("age")
-    risk_model = get_model("risk")
+    # Lazily initialize heavyweight models only when an API request arrives.
+    get_lazy_models()
 
     for file in files:
         image_data = file.read()
         image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
         # --- Phase 1: Detection (YOLO) ---
-        results = primary_yolo_model.predict(source=np.array(image))
+        results = model.predict(source=np.array(image))
         found_items = []
         annotated_base64 = ""
 
@@ -196,12 +178,12 @@ def detect_marine_waste(request):
                 for box in r.boxes:
                     coords = box.xyxy[0].cpu().tolist() 
                     area = (coords[2] - coords[0]) * (coords[3] - coords[1]) 
-                    label = primary_yolo_model.names[int(box.cls[0])] 
+                    label = model.names[int(box.cls[0])] 
                     items_to_process.append((label, area))
             elif r.masks:
                 for i, mask in enumerate(r.masks.data):
                     area = float(mask.sum().item()) 
-                    label = primary_yolo_model.names[int(r.boxes.cls[i])]
+                    label = model.names[int(r.boxes.cls[i])]
                     items_to_process.append((label, area))
 
             for label, area in items_to_process:
@@ -222,7 +204,6 @@ def detect_marine_waste(request):
         
         # --- Phase 3: Scientific Reporting Phase (RAG) ---
         try:
-            v_db = get_vector_db() 
             scientific_report_text = generate_scientific_report(hazard_metrics, str(batch_id))
         except Exception as e:
             scientific_report_text = f"Report error: {str(e)}"
@@ -250,7 +231,7 @@ def detect_marine_waste(request):
 
         # --- Phase 6: Database Persistence ---
         db_entry = MarineWasteDetection.objects.create(
-            user=request.user, 
+            user=request.user, # Tied strictly to the logged-in user
             batch_id=batch_id,
             filename=file.name,
             total_detections=len(found_items),
@@ -333,7 +314,7 @@ def custom_login(request):
 # 8. DATA FETCHING ENDPOINTS (FOR FRONTEND)
 # ==========================================
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def get_dashboard_data(request):
     batch_ids = MarineWasteDetection.objects.filter(user=request.user).values_list('batch_id', flat=True).distinct()
     dashboard = []
@@ -375,7 +356,7 @@ def get_dashboard_data(request):
     return Response(dashboard)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def get_single_detection(request, detection_id):
     try:
         detection = MarineWasteDetection.objects.get(id=detection_id, user=request.user)
@@ -385,7 +366,7 @@ def get_single_detection(request, detection_id):
         return Response({"error": "Detection not found or unauthorized"}, status=404)
     
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def get_batch_results(request, batch_id):
     detections = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user)
     
@@ -413,7 +394,7 @@ def get_batch_results(request, batch_id):
     })
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated]) # SECURED
 def delete_batch(request, batch_id):
     deleted_count, _ = MarineWasteDetection.objects.filter(batch_id=batch_id, user=request.user).delete()
     if deleted_count == 0:
@@ -525,6 +506,10 @@ def calculate_physical_hazard(found_items):
 def search_insight(request):
     query = request.GET.get('q') 
     results = []
+    
+    if query:
+        pass 
+        
     return render(request, 'insight_results.html', {'results': results, 'query': query})
 
 @api_view(['GET'])

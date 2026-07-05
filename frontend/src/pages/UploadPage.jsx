@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import './UploadPage.css';
 import axios from 'axios';
+import { API } from '../api';
 import { useTheme } from '../context/ThemeContext'; // 1. Imported useTheme
 
 const UploadPage = () => {
@@ -74,7 +75,7 @@ const UploadPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post("https://marine-insight-microplastics.onrender.com/api/detect/", formData, {
+            const response = await axios.post(API('/detect/'), formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"

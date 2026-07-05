@@ -1,130 +1,96 @@
+# Marine Insight Microplastics
 
-🌊 MarineInsight: A Unified Deep Learning & RAG Framework for Marine Microplastic Analysis and Hazard Assessment 
+This project is a full-stack web app for uploading marine sample images, running AI-based microplastic detection, and viewing analysis results.
 
-> An end-to-end full-stack platform automating the detection, quantification, and environmental risk assessment of marine microplastics using computer vision and Generative AI.
-> 
-> 
+It currently consists of:
+- a Django backend in [djangoproject](djangoproject)
+- a React + Vite frontend in [frontend](frontend)
 
-## 📌 Overview
+## Prerequisites
+Make sure you have the following installed locally:
+- Python 3.10+ (recommended 3.11)
+- Node.js 18+ and npm
+- Git
 
-Current methods for monitoring microplastic pollution rely heavily on manual microscopy, which is labor-intensive, error-prone, and struggles to scale for real-time environmental monitoring. **MarineInsight** bridges this gap by combining high-speed instance segmentation with a Retrieval-Augmented Generation (RAG) framework.
+## 1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd MarinePhase2
+```
 
-The system not only detects and measures microplastics from microscopic water sample images but also calculates their multidimensional physical risk and synthesizes the data into human-readable, evidence-backed ecological reports.
-
-<img width="1877" height="947" alt="image (12)" src="https://github.com/user-attachments/assets/06ceb741-5f78-48fe-b5f4-c31b5286214b" />
-
-<img width="1896" height="943" alt="image (1)" src="https://github.com/user-attachments/assets/a9d570b0-2dc4-4d45-af9f-b12ab9408efd" />
-
-<img width="1869" height="921" alt="image (2)" src="https://github.com/user-attachments/assets/b8f3d7bf-0b65-4fdb-8f16-60a142d323b1" />
-
-<img width="1875" height="938" alt="image (3)" src="https://github.com/user-attachments/assets/7405f369-2a7d-41a1-9ffc-dba1dc802b9a" />
-
-<img width="1879" height="957" alt="image (4)" src="https://github.com/user-attachments/assets/e85fd5c3-035d-41af-8037-de9859c892b9" />
-
-<img width="1832" height="832" alt="image (5)" src="https://github.com/user-attachments/assets/9b318686-d088-464d-b802-70b9e3dc12d2" />
-
-<img width="1866" height="918" alt="image (7)" src="https://github.com/user-attachments/assets/ced7bdc4-d843-4293-855d-4e489e4839eb" />
-
-
-## ✨ Key Features
-
-* **Real-Time Instance Segmentation:** Powered by **YOLOv8-Seg** to instantly detect, segment, and classify microplastics into four primary morphologies: Fiber, Film, Fragment, and Pellet.
-
-
-* **Multidimensional Hazard Assessment:** Calculates a particle-specific hazard score (Hp = Size Rank + Shape Rank) to evaluate the physical risk posed by the contaminants.
-
-
-* **RAG-Powered Ecotoxicologist:** Translates raw quantitative metrics into comprehensive environmental impact reports by retrieving contextual knowledge from validated scientific literature.
-
-
-* **Full-Stack Analytics Dashboard:** Features a React.js frontend for an interactive user experience and a robust Django backend for secure HTTP handling and deep learning model integration. Includes seamless PDF and CSV data exports.
-
-
-
-## 🛠️ Tech Stack
-
-* **Machine Learning & AI:** Python, YOLOv8-Seg, Transfer Learning 
-
-
-* **Generative AI:** Retrieval-Augmented Generation (RAG), Dense Vector Indexing, LLMs 
-
-
-* **Backend:** Django (Python), REST APIs 
-
-
-* **Frontend:** React.js 
-
-
-* **Data & Annotation:** Roboflow 
-
-
-
-## 🏗️ System Architecture
-
-1. **Data Ingestion & QA:** Users upload microscopic images after clearing a strict sample preparation and imaging standard checklist.
-
-
-2. **AI Processing:** YOLOv8-Seg extracts precise segmentation masks, outputting particle counts, size (area in pixels/mm²), and morphological class.
-
-
-3. **Hazard Calculation:** The backend ranks each particle based on its physical dimensions to isolate the maximum particle-specific hazard.
-
-
-4. **Knowledge Retrieval:** The RAG pipeline queries a vector database of scientific literature based on the specific sample findings.
-
-
-5. **Synthesis & Export:** The platform generates a grounded environmental report and visual dashboard for the researcher.
-
-
-
-## 🚀 Installation & Local Setup
-
-### Prerequisites
-
-* Python 3.9+
-* Node.js & npm
-* Git
-
-### Backend (Django + ML Models)
+## 2. Set up the Django backend
+Open a terminal in the project root and run:
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/YourUsername/MarineInsight.git
-cd MarineInsight/backend
-
-# 2. Create and activate a virtual environment
+cd djangoproject
 python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Run database migrations
-python manage.py migrate
-
-# 5. Start the backend server
-python manage.py runserver
-
 ```
 
-### Frontend (React)
+On Windows:
+```bash
+venv\\Scripts\\activate
+```
+
+On macOS/Linux:
+```bash
+source venv/bin/activate
+```
+
+Install the Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Apply the database migrations:
+```bash
+python manage.py migrate
+```
+
+Start the Django server:
+```bash
+python manage.py runserver 0.0.0.0:8000
+```
+
+The backend API should now be available at:
+- http://127.0.0.1:8000/api
+
+## 3. Set up the React frontend
+Open a second terminal and run:
 
 ```bash
-# 1. Navigate to the frontend directory
-cd ../frontend
-
-# 2. Install dependencies
+cd frontend
 npm install
-
-# 3. Start the development server
-npm start
-
 ```
 
-## 🔗 Project Links
+Start the frontend development server:
+```bash
+npm run dev
+```
 
-* **Roboflow Dataset:** [https://app.roboflow.com/project-aunby/microplastic-final-kpdl3/2]
-* **Colab Training Notebooks:**
-      🟢 [YOLOv8-Seg Training Notebook](https://colab.research.google.com/drive/1y6JAWzAqOOwEp_3ae1d4upe_IZp1H9j5)
-      🔵 [U-Net2+ Training Notebook](https://colab.research.google.com/drive/1kzI24BQzk_fHkDIYn02w-_re_WaQ1y5Z)
-      🟣 [U-Net Training Notebook](https://colab.research.google.com/drive/1FPozBVioMZxU2MOivYiuB3oS0VtgZw0k)
+The frontend should open at:
+- http://127.0.0.1:5173
+
+## 4. Create an account and use the app
+1. Open the frontend in your browser.
+2. Sign up or log in.
+3. Upload images for analysis from the upload page.
+4. View the generated results from the results dashboard.
+
+## 5. Notes
+- The frontend expects the Django API at the URL defined in [frontend/src/api.js](frontend/src/api.js). By default it uses:
+  - http://127.0.0.1:8000/api
+- If you are running Django on a different port, update the VITE_DJANGO_API_URL environment variable or the fallback URL in [frontend/src/api.js](frontend/src/api.js).
+- If you want to build the frontend for production:
+```bash
+cd frontend
+npm run build
+```
+
+## Project structure
+- [djangoproject](djangoproject) - Django backend, models, API views, and ML logic
+- [frontend](frontend) - React frontend built with Vite
+
+## Troubleshooting
+- If Django cannot start, make sure the virtual environment is activated and dependencies were installed successfully.
+- If the frontend cannot connect to the backend, confirm the Django server is running and that the API URL is correct.
+- If you see authentication issues, create a new user account and log in again.

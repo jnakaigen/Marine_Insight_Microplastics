@@ -6,8 +6,8 @@
     align-items: center;
     padding: 30px;
     overflow: hidden;
-    background: radial-gradient(circle at top, rgba(8, 44, 88, 0.95), rgba(2, 11, 24, 0.98) 55%);
-    color: #e7f8ff;
+    background: linear-gradient(135deg, var(--surface-soft), var(--surface) 70%, var(--surface-strong));
+    color: var(--text-primary);
 }
 
 .auth-page::before {
@@ -26,9 +26,9 @@
     min-height: 560px;
     border-radius: 36px;
     overflow: hidden;
-    border: 1px solid rgba(138, 231, 255, 0.22);
-    background: rgba(6, 20, 46, 0.28);
-    box-shadow: 0 40px 100px rgba(0, 14, 40, 0.45);
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
 
 .auth-shell::before {
@@ -65,7 +65,7 @@
     position: relative;
     z-index: 2;
     padding: 46px 42px;
-    background: rgba(6, 28, 55, 0.88);
+    background: var(--surface);
     -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
 }

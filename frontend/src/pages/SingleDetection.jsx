@@ -9,7 +9,7 @@
 
 // useEffect(()=>{
 //     const token = localStorage.getItem('token');
-//     fetch(`https://marine-insight-microplastics.onrender.com/api/detection/${batchId}/`,
+//     fetch(`http://127.0.0.1:8000/api/detection/${batchId}/`,
 //         {
 //             headers:{
 //                 'Authorization':`Bearer ${token}`,
@@ -55,6 +55,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import { API } from '../api';
+import { useTheme } from '../context/ThemeContext';
 import './ReportPage.css';
 
 const SingleDetection = () => {
@@ -62,10 +64,12 @@ const SingleDetection = () => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        fetch(`https://marine-insight-microplastics.onrender.com/api/detection/${batchId}/`, {
+        fetch(API(`/detection/${id}/`), {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -190,7 +194,7 @@ const SingleDetection = () => {
 };
 
 const styles = {
-    container: { padding: '30px', backgroundColor: '#f5f7fa', minHeight: '100vh', fontFamily: 'Arial, sans-serif' },
+    container: { padding: '30px', backgroundColor: 'transparent', minHeight: '100vh', fontFamily: 'Arial, sans-serif', color: 'var(--text-primary)' },
     backBtn: { border: 'none', background: 'none', color: '#0077be', cursor: 'pointer', fontWeight: 'bold', marginBottom: '10px' },
     headerSection: { marginBottom: '30px', borderBottom: '2px solid #e0e0e0', paddingBottom: '10px' },
     imageGrid: { display: 'flex', gap: '20px', marginBottom: '30px' },
@@ -199,20 +203,20 @@ const styles = {
     mainImg: { width: '100%', borderRadius: '8px' },
 
     // Table Styles matching your screenshot
-    tableCard: { backgroundColor: '#ffffff', borderRadius: '12px', padding: '25px', marginBottom: '30px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)', border: '1px solid #e0e0e0' },
-    tableTitle: { fontSize: '20px', color: '#333', marginBottom: '20px', fontWeight: '400' },
+    tableCard: { backgroundColor: 'var(--surface)', borderRadius: '12px', padding: '25px', marginBottom: '30px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' },
+    tableTitle: { fontSize: '20px', color: 'var(--text-primary)', marginBottom: '20px', fontWeight: '400' },
     table: { width: '100%', borderCollapse: 'collapse' },
     th: { textAlign: 'left', padding: '12px 15px', backgroundColor: '#f8f9fa', color: '#666', borderBottom: '1px solid #dee2e6', fontSize: '14px', fontWeight: '600' },
     tr: { borderBottom: '1px solid #f0f0f0' },
     td: { padding: '15px', color: '#555', fontSize: '14px' },
 
     // Detection Card Styles
-    detectionCard: { background: '#ffffff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '20px', margin: '15px 0', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' },
+    detectionCard: { background: 'var(--surface)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '20px', margin: '15px 0', boxShadow: '0 2px 4px rgba(0,0,0,0.03)' },
     cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', borderBottom: '1px solid #f9f9f9', paddingBottom: '10px' },
     cardContent: { lineHeight: '1.6', fontSize: '14px', color: '#444' },
     critical: { backgroundColor: '#d9534f', color: 'white', padding: '4px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 'bold' },
     high: { backgroundColor: '#f0ad4e', color: 'white', padding: '4px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 'bold' },
-    loader: { textAlign: 'center', marginTop: '50px', fontSize: '18px', color: '#666' }
+    loader: { textAlign: 'center', marginTop: '50px', fontSize: '18px', color: 'var(--text-secondary)' }
 };
 
 export default SingleDetection;

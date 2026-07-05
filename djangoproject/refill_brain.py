@@ -1,7 +1,7 @@
 # import os
 # import django
 # from langchain_huggingface import HuggingFaceEmbeddings
-# from langchain_chroma import Chroma
+# from langchain.vectorstores import Chroma
 
 # # Set up Django
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
@@ -43,7 +43,7 @@
 import os
 import django
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
 django.setup()

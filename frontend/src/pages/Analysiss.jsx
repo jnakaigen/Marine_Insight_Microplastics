@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import axios from 'axios';
 import { ShieldAlert, Activity, BarChart3, UploadCloud, PieChart, Info } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { API } from '../api';
 
 const Analysiss = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -31,7 +32,7 @@ const Analysiss = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/detect/', formData, {
+            const response = await axios.post(API('/detect/'), formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

@@ -1,18 +1,24 @@
 :root {
-  --bg-color: #041c38;
-  --text-primary: #e7f7ff;
-  --text-secondary: #c4d8ed;
-  --link-color: #a7eaff;
-  --header-bg: rgba(5, 25, 50, 0.82);
-  --card-bg: rgba(255, 255, 255, 0.08);
-  --accent: #2dd4bf;
-  --accent-strong: #14b8a6;
-  --accent-color: #8ae7ff;
+  --bg-color: #f4f9ff;
+  --text-primary: #10324d;
+  --text-secondary: #44637a;
+  --link-color: #0f6bbd;
+  --header-bg: rgba(255, 255, 255, 0.86);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --accent: #0ea5e9;
+  --accent-strong: #0077be;
+  --accent-color: #0f6bbd;
   --button-bg: #0ea5e9;
   --button-text: #ffffff;
-  --glass-border: rgba(173, 216, 230, 0.16);
-  --surface: rgba(10, 25, 44, 0.92);
-  --border-color: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(15, 107, 189, 0.16);
+  --surface: #ffffff;
+  --surface-soft: #f0f7ff;
+  --surface-strong: #dfefff;
+  --border-color: rgba(15, 107, 189, 0.14);
+  --primary-color: #0ea5e9;
+  --text-main: #10324d;
+  --text-muted: #44637a;
+  --shadow-hover: 0 15px 30px rgba(0, 119, 190, 0.15);
 }
 
 [data-theme='dark'] {
@@ -21,7 +27,7 @@
   --text-secondary: #a9cfe8;
   --link-color: #9ee7ff;
   --header-bg: rgba(4, 16, 30, 0.88);
-  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-bg: rgba(9, 21, 39, 0.9);
   --accent: #5eead4;
   --accent-strong: #14b8a6;
   --accent-color: #7dd3fc;
@@ -29,6 +35,13 @@
   --button-text: #ffffff;
   --glass-border: rgba(109, 228, 219, 0.12);
   --surface: rgba(10, 18, 32, 0.95);
+  --surface-soft: rgba(20, 34, 58, 0.95);
+  --surface-strong: rgba(8, 18, 34, 0.95);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --primary-color: #0ea5e9;
+  --text-main: #d8f2ff;
+  --text-muted: #a9cfe8;
+  --shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.24);
 }
 
 html {
@@ -42,7 +55,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #0d3d72 0%, #02101f 40%, #01070f 100%);
+  background: linear-gradient(135deg, var(--surface-soft) 0%, var(--surface) 70%, var(--surface-strong) 100%);
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

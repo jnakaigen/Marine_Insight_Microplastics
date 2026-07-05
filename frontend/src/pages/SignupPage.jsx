@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API } from '../api';
 import './AuthPage.css';
 import waterVideo from '../assets/water-video.mp4';
 
@@ -25,10 +26,11 @@ const SignupPage = () => {
 
         try {
             // 3. Send a POST request to the backend
-            const response = await axios.post('https://marine-insight-microplastics.onrender.com/api/register', {
-                fullName: fullName,
+            const response = await axios.post(API('/signup/'), {
+                username: email,
                 email: email,
                 password: password,
+                fullName: fullName,
             });
 
             // 4. Handle the successful response

@@ -83,6 +83,7 @@
 // export default Analysis;
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API } from '../api';
 
 function Analysis() {
   const [file, setFile] = useState(null);
@@ -108,7 +109,7 @@ function Analysis() {
 
     try {
       // Ensure this matches your Django URL
-      const response = await axios.post('http://localhost:8000/api/detect/', formData);
+      const response = await axios.post(API('/detect/'), formData);
       setData(response.data);
     } catch (error) {
       console.error("Connection Error:", error);

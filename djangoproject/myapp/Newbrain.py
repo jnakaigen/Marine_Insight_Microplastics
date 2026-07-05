@@ -1,6 +1,7 @@
 import os
 import json
 from openai import OpenAI
+
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from dotenv import load_dotenv
@@ -16,18 +17,28 @@ client = OpenAI(
 )
 
 # 2. Setup Vector DB
-current_dir = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(current_dir, "marine_brain_new")
+vector_db = None
 
-# Initialize Embeddings
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-# We use the existing vector_db connection
-vector_db = Chroma(
-    persist_directory=DB_PATH, 
-    embedding_function=embeddings, 
-    collection_name="langchain"
-)
+def get_vector_db():
+    global vector_db
+    if vector_db is not None:
+        return vector_db
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, "marine_brain_new")
+    if not os.path.exists(db_path):
+        print(f"🚨 Chroma DB not found: {db_path}")
+        return None
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_db = Chroma(
+        persist_directory=db_path,
+        embedding_function=embeddings,
+        collection_name="langchain"
+    )
+    return vector_db
+
 
 def generate_scientific_report(metrics, batch_id_string="auto-generated"):
     """
@@ -58,15 +69,20 @@ def generate_scientific_report(metrics, batch_id_string="auto-generated"):
 
     query = f"Physical toxicity and ingestion risk of {dom_shape}, {worst_shape}, {dom_size}, and {worst_size} microplastics"
     
-    try:
-        docs = vector_db.similarity_search(query, k=6)
-        context_parts = []
-        for i, d in enumerate(docs):
-            source = d.metadata.get('source', 'Unknown Source') 
-            context_parts.append(f"[Source: {source}]\n{d.page_content}")
-        context = "\n\n".join(context_parts)
-    except Exception as e:
-        context = "Search failed. No supporting evidence found in provided documents."
+    db = get_vector_db()
+    if db is None:
+        context = "No research context available."
+    else:
+        try:
+            docs = db.similarity_search(query, k=6)
+            context_parts = []
+            for i, d in enumerate(docs):
+                source = d.metadata.get('source', 'Unknown Source') 
+                context_parts.append(f"[Source: {source}]\n{d.page_content}")
+            context = "\n\n".join(context_parts)
+        except Exception as e:
+            print(f"❌ Chroma search error: {e}")
+            context = "Search failed. No supporting evidence found in provided documents."
 
     # UPDATED PROMPT: Enforcing worst-case particle focus and side effects.
     prompt = f"""
